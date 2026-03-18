@@ -1,1 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBM Gaming</title>
+  <style>
+    :root {
+      --blue: #3b82f6;
+      --blue-dark: #1d4ed8;
+      --blue-glow: rgba(59, 130, 246, 0.4);
+      --blue-glow-soft: rgba(59, 130, 246, 0.15);
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar — fixed left, blue glow */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 220px;
+      background: linear-gradient(180deg, var(--panel) 0%, #0f172a 100%);
+      border-right: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: 4px 0 24px var(--blue-glow-soft), inset -1px 0 0 rgba(59, 130, 246, 0.1);
+      padding: 1.5rem 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--blue-glow), transparent);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .sidebar .logo {
+      padding: 0 1.25rem 1.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+      margin-bottom: 1rem;
+    }
+    .sidebar nav { padding: 0 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .sidebar nav a {
+      display: block;
+      padding: 0.65rem 1rem;
+      color: var(--text-muted);
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
+      margin: 0;
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .sidebar nav a:hover { color: var(--text); background: linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(29, 78, 216, 0.1) 100%); box-shadow: 0 6px 24px var(--blue-glow-soft), 0 0 32px rgba(59, 130, 246, 0.12); }
+
+    .sidebar-bottom { margin-top: auto; padding: 1rem 1rem 0; border-top: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; gap: 1rem; }
+    .sidebar-currency {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
+      padding: 0.85rem 1rem;
+    }
+    .sidebar-currency .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .sidebar-currency .amount { font-size: 1.25rem; font-weight: 700; color: var(--blue); }
+    .sidebar-currency .claim { display: block; width: 100%; margin-top: 0.6rem; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; text-align: center; text-decoration: none; }
+    .sidebar-currency .claim:hover { background: var(--blue-dark); }
+    .sidebar-signin {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
+      padding: 0.85rem 1rem;
+    }
+    .sidebar-signin .label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
+    .sidebar-signin input {
+      width: 100%;
+      padding: 0.5rem 0.65rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      background: var(--bg);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 8px;
+      color: var(--text);
+    }
+    .sidebar-signin input::placeholder { color: var(--text-muted); opacity: 0.8; }
+    .sidebar-signin .btn-signin { display: block; width: 100%; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; margin-top: 0.25rem; }
+    .sidebar-signin .btn-signin:hover { background: var(--blue-dark); }
+    .sidebar-signin .btn-signout { display: block; width: 100%; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text); background: transparent; border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 8px; cursor: pointer; margin-top: 0.25rem; }
+    .sidebar-signin .btn-signout:hover { background: var(--blue-glow-soft); }
+    .sidebar-signin .auth-status { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .sidebar-signin .auth-form { display: block; }
+    .sidebar-signin .auth-form.hidden { display: none; }
+
+    /* Main area */
+    .main {
+      flex: 1;
+      margin-left: 220px;
+      margin-right: 240px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Announcements bar — floating, blue glow */
+    .announcements {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px var(--blue-glow-soft), 0 0 48px rgba(59, 130, 246, 0.1);
+      padding: 0.75rem 1.5rem;
+      margin: 1rem 1.5rem 0;
+      position: sticky;
+      top: 1rem;
+      z-index: 5;
+    }
+    .announcements-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .announcements label { font-size: 0.8rem; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
+    .announcements p { margin: 0; font-size: 0.95rem; color: var(--text); }
+
+    /* Content */
+    .content-row {
+      flex: 1;
+      padding: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .content h1 { font-size: 1.5rem; margin: 0 0 1rem; font-weight: 600; }
+    .content p { color: var(--text-muted); margin: 0 0 0.5rem; }
+
+    /* Leaderboard — fixed right sidebar, same style as left */
+    .leaderboard {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 240px;
+      background: linear-gradient(180deg, var(--panel) 0%, #0f172a 100%);
+      border-left: 1px solid rgba(59, 130, 246, 0.2);
+      box-shadow: -4px 0 24px var(--blue-glow-soft), inset 1px 0 0 rgba(59, 130, 246, 0.1);
+      padding: 1.5rem 0;
+      z-index: 10;
+    }
+    .leaderboard::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--blue-glow), transparent);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .leaderboard h2 {
+      margin: 0 0 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      padding: 0 1.25rem 0.75rem;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+    }
+    .leaderboard ol { margin: 0; padding: 0 0.75rem; list-style: none; }
+    .leaderboard li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.9rem;
+    }
+    .leaderboard li:last-child { border-bottom: none; }
+    .leaderboard .rank { font-weight: 700; color: var(--blue); min-width: 1.5em; }
+    .leaderboard .name { flex: 1; color: var(--text); }
+    .leaderboard .pts { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">MBM Gaming</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Games</a>
+        <a href="#">Casino</a>
+        <a href="#">Human trafficking</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-currency">
+          <div class="label">Your balance</div>
+          <div class="amount" id="balance-display">0 pts</div>
+          <button type="button" class="claim" id="claim-btn">Claim currency</button>
+        </div>
+        <div class="sidebar-signin">
+          <label class="label">Sign in</label>
+          <p class="auth-status" id="auth-status">Sign in to save balance</p>
+          <div class="auth-form" id="auth-form">
+            <input type="email" id="login-email" placeholder="Email" aria-label="Email" autocomplete="email">
+            <input type="password" id="login-password" placeholder="Password" aria-label="Password" autocomplete="current-password">
+            <button type="button" class="btn-signin" id="btn-signin">Sign in</button>
+          </div>
+          <button type="button" class="btn-signout hidden" id="btn-signout">Sign out</button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="announcements">
+        <div class="announcements-inner">
+          <label>Announcements</label>
+          <p id="announcements-text">Loading…</p>
+        </div>
+      </div>
+
+      <div class="content-row">
+        <main class="content">
+          <h1>Welcome</h1>
+          <p>Info box ig</p>
+        </main>
+      </div>
+    </div>
+
+    <aside class="leaderboard">
+      <h2>Leaderboard</h2>
+      <ol>
+        <li><span class="rank">1</span><span class="name">Alex M.</span><span class="pts">2,840</span></li>
+        <li><span class="rank">2</span><span class="name">Jordan K.</span><span class="pts">2,710</span></li>
+        <li><span class="rank">3</span><span class="name">Sam R.</span><span class="pts">2,590</span></li>
+        <li><span class="rank">4</span><span class="name">Casey L.</span><span class="pts">2,420</span></li>
+        <li><span class="rank">5</span><span class="name">Riley T.</span><span class="pts">2,380</span></li>
+      </ol>
+    </aside>
+  </div>
+
+  <!-- Firebase: add your project's SDK scripts and config in Firebase Console -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script>
+    // Firebase setup:
+    // 1. Create a project at https://console.firebase.google.com
+    // 2. Enable Authentication → Sign-in method → Email/Password
+    // 3. Create Firestore Database (Start in test mode for dev)
+    // 4. Paste your config below (Project settings → General → Your apps → Add app → Web)
+    //
+    // Firestore: Create collection "announcements" with docs { text: "Your message", order: 0 }
+    //            User balances are stored in "users/{uid}" with { balance: number }
+    // ——— CONFIG: paste your Firebase config from Project settings → General → Your apps ———
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    // ———————————————————————————————————————————————————————————————————————————————————————
+
+    // Initialize Firebase (no-op if config is placeholder)
+    let app, auth, db;
+    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+      app = firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth(app);
+      db = firebase.firestore(app);
+    }
+
+    const CLAIM_AMOUNT = 10;
+    const BALANCE_COLLECTION = "users";
+    const ANNOUNCEMENTS_COLLECTION = "announcements";
+
+    const balanceEl = document.getElementById("balance-display");
+    const claimBtn = document.getElementById("claim-btn");
+    const announcementsEl = document.getElementById("announcements-text");
+    const authStatus = document.getElementById("auth-status");
+    const authForm = document.getElementById("auth-form");
+    const btnSignIn = document.getElementById("btn-signin");
+    const btnSignOut = document.getElementById("btn-signout");
+    const loginEmail = document.getElementById("login-email");
+    const loginPassword = document.getElementById("login-password");
+
+    function show(el, show) {
+      if (!el) return;
+      el.classList.toggle("hidden", !show);
+    }
+
+    function setBalance(pts) {
+      if (balanceEl) balanceEl.textContent = (pts != null ? pts : 0) + " pts";
+    }
+
+    function getBalanceRef(uid) {
+      if (!db) return null;
+      return db.collection(BALANCE_COLLECTION).doc(uid);
+    }
+
+    function loadBalance(uid) {
+      const ref = getBalanceRef(uid);
+      if (!ref) return;
+      ref.get().then(function(snap) {
+        const data = snap.data();
+        setBalance(data && typeof data.balance === "number" ? data.balance : 0);
+      }).catch(function() { setBalance(0); });
+    }
+
+    function listenBalance(uid) {
+      const ref = getBalanceRef(uid);
+      if (!ref) return;
+      ref.onSnapshot(function(snap) {
+        const data = snap.data();
+        setBalance(data && typeof data.balance === "number" ? data.balance : 0);
+      }, function() { setBalance(0); });
+    }
+
+    function claimCurrency(uid) {
+      if (!db || !uid) return;
+      const ref = getBalanceRef(uid);
+      ref.get().then(function(snap) {
+        const current = (snap.data() && snap.data().balance) || 0;
+        return ref.set({ balance: current + CLAIM_AMOUNT }, { merge: true });
+      }).then(function() {
+        if (claimBtn) claimBtn.disabled = false;
+      }).catch(function() {
+        if (claimBtn) claimBtn.disabled = false;
+      });
+      if (claimBtn) claimBtn.disabled = true;
+    }
+
+    function loadAnnouncements() {
+      if (!db) {
+        if (announcementsEl) announcementsEl.textContent = "Configure Firebase to load announcements.";
+        return;
+      }
+      db.collection(ANNOUNCEMENTS_COLLECTION)
+        .limit(10)
+        .get()
+        .then(function(snap) {
+          const items = [];
+          snap.forEach(function(d) {
+            const data = d.data();
+            const t = data.text;
+            if (t) items.push({ order: data.order != null ? data.order : 0, text: t });
+          });
+          items.sort(function(a, b) { return a.order - b.order; });
+          const texts = items.slice(0, 5).map(function(i) { return i.text; });
+          if (announcementsEl) announcementsEl.textContent = texts.length ? texts.join(" · ") : "No announcements.";
+        })
+        .catch(function() {
+          if (announcementsEl) announcementsEl.textContent = "Could not load announcements.";
+        });
+    }
+
+    function updateAuthUI(user) {
+      const signedIn = !!user;
+      show(authForm, !signedIn);
+      show(btnSignOut, signedIn);
+      if (authStatus) authStatus.textContent = signedIn ? "Signed in as " + (user.email || "user") : "Sign in to save balance";
+      if (signedIn) {
+        setBalance(null);
+        listenBalance(user.uid);
+        claimBtn.onclick = function() { claimCurrency(user.uid); };
+      } else {
+        setBalance(0);
+        claimBtn.onclick = null;
+      }
+    }
+
+    if (auth) {
+      auth.onAuthStateChanged(function(user) {
+        updateAuthUI(user);
+      });
+    } else {
+      if (authStatus) authStatus.textContent = "Add Firebase config to enable sign-in.";
+    }
+
+    if (btnSignIn) {
+      btnSignIn.addEventListener("click", function() {
+        if (!auth) return;
+        var email = (loginEmail && loginEmail.value) || "";
+        var password = (loginPassword && loginPassword.value) || "";
+        if (!email || !password) return;
+        btnSignIn.disabled = true;
+        auth.signInWithEmailAndPassword(email, password)
+          .then(function() { btnSignIn.disabled = false; })
+          .catch(function(err) {
+            btnSignIn.disabled = false;
+            authStatus.textContent = err.message || "Sign in failed";
+          });
+      });
+    }
+    if (btnSignOut) {
+      btnSignOut.addEventListener("click", function() {
+        if (auth) auth.signOut();
+      });
+    }
+
+    loadAnnouncements();
+    if (claimBtn && auth && auth.currentUser) {
+      claimBtn.onclick = function() { claimCurrency(auth.currentUser.uid); };
+    }
+  </script>
+</body>
+</html>
