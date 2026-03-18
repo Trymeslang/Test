@@ -23,186 +23,114 @@
     a { color: var(--blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
+    .app { display: flex; min-height: 100vh; }
 
-    /* Sidebar — fixed left, blue glow */
+    /* Sidebar */
     .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 220px;
+      position: fixed; left: 0; top: 0; bottom: 0; width: 220px;
       background: linear-gradient(180deg, var(--panel) 0%, #0f172a 100%);
       border-right: 1px solid rgba(59, 130, 246, 0.2);
       box-shadow: 4px 0 24px var(--blue-glow-soft), inset -1px 0 0 rgba(59, 130, 246, 0.1);
-      padding: 1.5rem 0;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
+      padding: 1.5rem 0; z-index: 10; display: flex; flex-direction: column;
     }
     .sidebar::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 2px;
-      height: 100%;
-      background: linear-gradient(180deg, transparent, var(--blue-glow), transparent);
-      opacity: 0.6;
-      pointer-events: none;
+      content: ''; position: absolute; top: 0; right: 0; width: 2px; height: 100%;
+      background: linear-gradient(180deg, transparent, var(--blue-glow), transparent); opacity: 0.6; pointer-events: none;
     }
     .sidebar .logo {
-      margin: 0 1rem 1rem;
-      padding: 0.75rem 1rem;
-      font-family: "Orbitron", sans-serif;
-      font-weight: 900;
-      font-size: 1.5rem;
-      letter-spacing: 0.15em;
-      color: var(--text);
-      text-align: center;
-      background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
+      margin: 0 1rem 1rem; padding: 0.75rem 1rem; font-family: "Orbitron", sans-serif;
+      font-weight: 900; font-size: 1.5rem; letter-spacing: 0.15em; color: var(--text);
+      text-align: center; background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px;
       box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
     }
     .sidebar nav { padding: 0 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .sidebar nav a {
-      display: block;
-      padding: 0.65rem 1rem;
-      color: var(--text-muted);
+      display: block; padding: 0.65rem 1rem; color: var(--text-muted);
       background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
-      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
-      margin: 0;
-      text-decoration: none;
-      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+      border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px;
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08); margin: 0;
+      text-decoration: none; transition: color 0.2s, background 0.2s, box-shadow 0.2s;
     }
-    .sidebar nav a:hover { color: var(--text); background: linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(29, 78, 216, 0.1) 100%); box-shadow: 0 6px 24px var(--blue-glow-soft), 0 0 32px rgba(59, 130, 246, 0.12); }
+    .sidebar nav a:hover {
+      color: var(--text); background: linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(29, 78, 216, 0.1) 100%);
+      box-shadow: 0 6px 24px var(--blue-glow-soft), 0 0 32px rgba(59, 130, 246, 0.12);
+    }
 
     .sidebar-bottom { margin-top: auto; padding: 1rem 1rem 0; border-top: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; gap: 1rem; }
     .sidebar-currency {
       background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
-      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
-      padding: 0.85rem 1rem;
+      border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px;
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08); padding: 0.85rem 1rem;
     }
     .sidebar-currency .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
     .sidebar-currency .amount { font-size: 1.25rem; font-weight: 700; color: var(--blue); }
-    .sidebar-currency .claim { display: block; width: 100%; margin-top: 0.6rem; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; text-align: center; text-decoration: none; }
-    .sidebar-currency .claim:hover { background: var(--blue-dark); }
+    .sidebar-currency .claim {
+      display: block; width: 100%; margin-top: 0.6rem; padding: 0.5rem; font-size: 0.85rem; font-weight: 600;
+      color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; text-align: center;
+    }
+    .sidebar-currency .claim:hover:not(:disabled) { background: var(--blue-dark); }
+    .sidebar-currency .claim:disabled { opacity: 0.5; cursor: not-allowed; }
+    
     .sidebar-signin {
       background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
-      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
-      padding: 0.85rem 1rem;
+      border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px;
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08); padding: 0.85rem 1rem;
     }
     .sidebar-signin .label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem; display: block; }
     .sidebar-signin input {
-      width: 100%;
-      padding: 0.5rem 0.65rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-      background: var(--bg);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 8px;
-      color: var(--text);
+      width: 100%; padding: 0.5rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.85rem;
+      background: var(--bg); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 8px; color: var(--text);
     }
     .sidebar-signin input::placeholder { color: var(--text-muted); opacity: 0.8; }
     .sidebar-signin .btn-signin { display: block; width: 100%; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; margin-top: 0.25rem; }
     .sidebar-signin .btn-signin:hover { background: var(--blue-dark); }
+    .sidebar-signin .btn-signup { display: block; width: 100%; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--blue); background: transparent; border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 8px; cursor: pointer; margin-top: 0.5rem; }
+    .sidebar-signin .btn-signup:hover { background: var(--blue-glow-soft); }
     .sidebar-signin .btn-signout { display: block; width: 100%; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--text); background: transparent; border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 8px; cursor: pointer; margin-top: 0.25rem; }
     .sidebar-signin .btn-signout:hover { background: var(--blue-glow-soft); }
-    .sidebar-signin .auth-status { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .sidebar-signin .auth-status { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; word-break: break-all; }
     .sidebar-signin .auth-form { display: block; }
     .sidebar-signin .auth-form.hidden { display: none; }
+    .hidden { display: none !important; }
 
     /* Main area */
-    .main {
-      flex: 1;
-      margin-left: 220px;
-      margin-right: 240px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    .main { flex: 1; margin-left: 220px; margin-right: 240px; display: flex; flex-direction: column; min-height: 100vh; }
 
-    /* Announcements bar — floating, blue glow */
+    /* Announcements bar */
     .announcements {
       background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      border-radius: 12px;
+      border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px;
       box-shadow: 0 8px 32px var(--blue-glow-soft), 0 0 48px rgba(59, 130, 246, 0.1);
-      padding: 0.75rem 1.5rem;
-      margin: 1rem 1.5rem 0;
-      position: sticky;
-      top: 1rem;
-      z-index: 5;
+      padding: 0.75rem 1.5rem; margin: 1rem 1.5rem 0; position: sticky; top: 1rem; z-index: 5;
     }
     .announcements-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .announcements label { font-size: 0.8rem; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; }
     .announcements p { margin: 0; font-size: 0.95rem; color: var(--text); }
 
     /* Content */
-    .content-row {
-      flex: 1;
-      padding: 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    .content-row { flex: 1; padding: 1.5rem; max-width: 1200px; margin: 0 auto; width: 100%; }
     .content h1 { font-size: 1.5rem; margin: 0 0 1rem; font-weight: 600; }
     .content p { color: var(--text-muted); margin: 0 0 0.5rem; }
 
-    /* Leaderboard — fixed right sidebar, same style as left */
+    /* Leaderboard */
     .leaderboard {
-      position: fixed;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 240px;
+      position: fixed; right: 0; top: 0; bottom: 0; width: 240px;
       background: linear-gradient(180deg, var(--panel) 0%, #0f172a 100%);
       border-left: 1px solid rgba(59, 130, 246, 0.2);
       box-shadow: -4px 0 24px var(--blue-glow-soft), inset 1px 0 0 rgba(59, 130, 246, 0.1);
-      padding: 1.5rem 0;
-      z-index: 10;
+      padding: 1.5rem 0; z-index: 10; overflow-y: auto;
     }
     .leaderboard::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 2px;
-      height: 100%;
-      background: linear-gradient(180deg, transparent, var(--blue-glow), transparent);
-      opacity: 0.6;
-      pointer-events: none;
+      content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%;
+      background: linear-gradient(180deg, transparent, var(--blue-glow), transparent); opacity: 0.6; pointer-events: none;
     }
-    .leaderboard h2 {
-      margin: 0 0 1rem;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      padding: 0 1.25rem 0.75rem;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
-    }
+    .leaderboard h2 { margin: 0 0 1rem; font-size: 1rem; font-weight: 600; color: var(--text); padding: 0 1.25rem 0.75rem; border-bottom: 1px solid rgba(59, 130, 246, 0.15); }
     .leaderboard ol { margin: 0; padding: 0 0.75rem; list-style: none; }
-    .leaderboard li {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.6rem 0.5rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 0.9rem;
-    }
+    .leaderboard li { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
     .leaderboard li:last-child { border-bottom: none; }
     .leaderboard .rank { font-weight: 700; color: var(--blue); min-width: 1.5em; }
-    .leaderboard .name { flex: 1; color: var(--text); }
+    .leaderboard .name { flex: 1; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .leaderboard .pts { color: var(--text-muted); font-variant-numeric: tabular-nums; }
   </style>
 </head>
@@ -220,15 +148,16 @@
         <div class="sidebar-currency">
           <div class="label">Your balance</div>
           <div class="amount" id="balance-display">0 pts</div>
-          <button type="button" class="claim" id="claim-btn">Claim currency</button>
+          <button type="button" class="claim" id="claim-btn" disabled>Claim currency</button>
         </div>
         <div class="sidebar-signin">
-          <label class="label">Sign in</label>
+          <label class="label">Account</label>
           <p class="auth-status" id="auth-status">Sign in to save balance</p>
           <div class="auth-form" id="auth-form">
             <input type="email" id="login-email" placeholder="Email" aria-label="Email" autocomplete="email">
             <input type="password" id="login-password" placeholder="Password" aria-label="Password" autocomplete="current-password">
             <button type="button" class="btn-signin" id="btn-signin">Sign in</button>
+            <button type="button" class="btn-signup" id="btn-signup">Sign up</button>
           </div>
           <button type="button" class="btn-signout hidden" id="btn-signout">Sign out</button>
         </div>
@@ -253,180 +182,193 @@
 
     <aside class="leaderboard">
       <h2>Leaderboard</h2>
-      <ol>
-        <li><span class="rank">1</span><span class="name">Alex M.</span><span class="pts">2,840</span></li>
-        <li><span class="rank">2</span><span class="name">Jordan K.</span><span class="pts">2,710</span></li>
-        <li><span class="rank">3</span><span class="name">Sam R.</span><span class="pts">2,590</span></li>
-        <li><span class="rank">4</span><span class="name">Casey L.</span><span class="pts">2,420</span></li>
-        <li><span class="rank">5</span><span class="name">Riley T.</span><span class="pts">2,380</span></li>
+      <ol id="leaderboard-list">
+        <li><span class="name">Loading...</span></li>
       </ol>
     </aside>
   </div>
 
-  <!-- Firebase: add your project's SDK scripts and config in Firebase Console -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script>
-    // Firebase setup:
-    // 1. Create a project at https://console.firebase.google.com
-    // 2. Enable Authentication → Sign-in method → Email/Password
-    // 3. Create Firestore Database (Start in test mode for dev)
-    // 4. Paste your config below (Project settings → General → Your apps → Add app → Web)
-    //
-    // Firestore: Create collection "announcements" with docs { text: "Your message", order: 0 }
-    //            User balances are stored in "users/{uid}" with { balance: number }
-    // ——— CONFIG: paste your Firebase config from Project settings → General → Your apps ———
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, updateDoc, collection, query, orderBy, limit, onSnapshot, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyB7-Pm2sfSobxBgyilqPpM7y5cv9TFDNVY",
+      authDomain: "mthree-b6241.firebaseapp.com",
+      projectId: "mthree-b6241",
+      storageBucket: "mthree-b6241.firebasestorage.app",
+      messagingSenderId: "1013412566182",
+      appId: "1:1013412566182:web:c941b68105dfccd9db5067",
+      measurementId: "G-K90DH1YGRR"
     };
-    // ———————————————————————————————————————————————————————————————————————————————————————
 
-    // Initialize Firebase (no-op if config is placeholder)
-    let app, auth, db;
-    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-      app = firebase.initializeApp(firebaseConfig);
-      auth = firebase.auth(app);
-      db = firebase.firestore(app);
-    }
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    const CLAIM_AMOUNT = 10;
-    const BALANCE_COLLECTION = "users";
-    const ANNOUNCEMENTS_COLLECTION = "announcements";
-
+    // DOM Elements
     const balanceEl = document.getElementById("balance-display");
     const claimBtn = document.getElementById("claim-btn");
     const announcementsEl = document.getElementById("announcements-text");
     const authStatus = document.getElementById("auth-status");
     const authForm = document.getElementById("auth-form");
     const btnSignIn = document.getElementById("btn-signin");
+    const btnSignUp = document.getElementById("btn-signup");
     const btnSignOut = document.getElementById("btn-signout");
     const loginEmail = document.getElementById("login-email");
     const loginPassword = document.getElementById("login-password");
+    const leaderboardList = document.getElementById("leaderboard-list");
 
-    function show(el, show) {
-      if (!el) return;
-      el.classList.toggle("hidden", !show);
+    let currentUser = null;
+    let unsubscribeBalance = null;
+
+    // Helper to toggle visibility
+    function show(el, isVisible) {
+      if (el) el.classList.toggle("hidden", !isVisible);
     }
 
-    function setBalance(pts) {
-      if (balanceEl) balanceEl.textContent = (pts != null ? pts : 0) + " pts";
-    }
-
-    function getBalanceRef(uid) {
-      if (!db) return null;
-      return db.collection(BALANCE_COLLECTION).doc(uid);
-    }
-
-    function loadBalance(uid) {
-      const ref = getBalanceRef(uid);
-      if (!ref) return;
-      ref.get().then(function(snap) {
-        const data = snap.data();
-        setBalance(data && typeof data.balance === "number" ? data.balance : 0);
-      }).catch(function() { setBalance(0); });
-    }
-
-    function listenBalance(uid) {
-      const ref = getBalanceRef(uid);
-      if (!ref) return;
-      ref.onSnapshot(function(snap) {
-        const data = snap.data();
-        setBalance(data && typeof data.balance === "number" ? data.balance : 0);
-      }, function() { setBalance(0); });
-    }
-
-    function claimCurrency(uid) {
-      if (!db || !uid) return;
-      const ref = getBalanceRef(uid);
-      ref.get().then(function(snap) {
-        const current = (snap.data() && snap.data().balance) || 0;
-        return ref.set({ balance: current + CLAIM_AMOUNT }, { merge: true });
-      }).then(function() {
-        if (claimBtn) claimBtn.disabled = false;
-      }).catch(function() {
-        if (claimBtn) claimBtn.disabled = false;
-      });
-      if (claimBtn) claimBtn.disabled = true;
-    }
-
-    function loadAnnouncements() {
-      if (!db) {
-        if (announcementsEl) announcementsEl.textContent = "Configure Firebase to load announcements.";
-        return;
-      }
-      db.collection(ANNOUNCEMENTS_COLLECTION)
-        .limit(10)
-        .get()
-        .then(function(snap) {
-          const items = [];
-          snap.forEach(function(d) {
-            const data = d.data();
-            const t = data.text;
-            if (t) items.push({ order: data.order != null ? data.order : 0, text: t });
-          });
-          items.sort(function(a, b) { return a.order - b.order; });
-          const texts = items.slice(0, 5).map(function(i) { return i.text; });
-          if (announcementsEl) announcementsEl.textContent = texts.length ? texts.join(" · ") : "No announcements.";
-        })
-        .catch(function() {
-          if (announcementsEl) announcementsEl.textContent = "Could not load announcements.";
-        });
-    }
-
-    function updateAuthUI(user) {
+    // Auth State Listener
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
       const signedIn = !!user;
+      
       show(authForm, !signedIn);
       show(btnSignOut, signedIn);
-      if (authStatus) authStatus.textContent = signedIn ? "Signed in as " + (user.email || "user") : "Sign in to save balance";
+      claimBtn.disabled = !signedIn;
+      
       if (signedIn) {
-        setBalance(null);
-        listenBalance(user.uid);
-        claimBtn.onclick = function() { claimCurrency(user.uid); };
+        authStatus.textContent = "Signed in: " + user.email.split('@')[0];
+        listenToBalance(user.uid);
       } else {
-        setBalance(0);
-        claimBtn.onclick = null;
+        authStatus.textContent = "Sign in to save balance";
+        balanceEl.textContent = "0 pts";
+        if (unsubscribeBalance) {
+            unsubscribeBalance();
+            unsubscribeBalance = null;
+        }
       }
-    }
+    });
 
-    if (auth) {
-      auth.onAuthStateChanged(function(user) {
-        updateAuthUI(user);
-      });
-    } else {
-      if (authStatus) authStatus.textContent = "Add Firebase config to enable sign-in.";
-    }
+    // Authentication Actions
+    btnSignUp.addEventListener("click", async () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+      if (!email || !password) return alert("Enter email and password.");
+      
+      try {
+        btnSignUp.disabled = true;
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Create initial user document in Firestore for points/leaderboard
+        await setDoc(doc(db, "users", user.uid), {
+          email: user.email,
+          name: email.split('@')[0], // Generate a default username
+          balance: 0
+        });
+      } catch (err) {
+        authStatus.textContent = err.message.replace("Firebase: ", "");
+      } finally {
+        btnSignUp.disabled = false;
+      }
+    });
 
-    if (btnSignIn) {
-      btnSignIn.addEventListener("click", function() {
-        if (!auth) return;
-        var email = (loginEmail && loginEmail.value) || "";
-        var password = (loginPassword && loginPassword.value) || "";
-        if (!email || !password) return;
+    btnSignIn.addEventListener("click", async () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+      if (!email || !password) return;
+      
+      try {
         btnSignIn.disabled = true;
-        auth.signInWithEmailAndPassword(email, password)
-          .then(function() { btnSignIn.disabled = false; })
-          .catch(function(err) {
-            btnSignIn.disabled = false;
-            authStatus.textContent = err.message || "Sign in failed";
-          });
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        authStatus.textContent = "Sign in failed. Check credentials.";
+      } finally {
+        btnSignIn.disabled = false;
+      }
+    });
+
+    btnSignOut.addEventListener("click", () => signOut(auth));
+
+    // Points System
+    function listenToBalance(uid) {
+      const userDocRef = doc(db, "users", uid);
+      unsubscribeBalance = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          balanceEl.textContent = `${docSnap.data().balance || 0} pts`;
+        } else {
+          balanceEl.textContent = "0 pts";
+        }
       });
     }
-    if (btnSignOut) {
-      btnSignOut.addEventListener("click", function() {
-        if (auth) auth.signOut();
+
+    claimBtn.addEventListener("click", async () => {
+      if (!currentUser) return;
+      try {
+        claimBtn.disabled = true;
+        const userDocRef = doc(db, "users", currentUser.uid);
+        // Atomically increment the user's balance by 10
+        await updateDoc(userDocRef, {
+          balance: increment(10)
+        });
+      } catch (error) {
+        console.error("Error claiming points", error);
+        alert("Could not claim points. Please try again.");
+      } finally {
+        // Re-enable after a tiny delay to prevent spamming
+        setTimeout(() => { claimBtn.disabled = false; }, 500);
+      }
+    });
+
+    // Leaderboard System (Live Updates)
+    const leaderboardQuery = query(collection(db, "users"), orderBy("balance", "desc"), limit(10));
+    onSnapshot(leaderboardQuery, (snapshot) => {
+      leaderboardList.innerHTML = ""; // Clear list
+      let rank = 1;
+      
+      if (snapshot.empty) {
+        leaderboardList.innerHTML = `<li><span class="name">No players yet.</span></li>`;
+        return;
+      }
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const li = document.createElement("li");
+        
+        li.innerHTML = `
+          <span class="rank">${rank}</span>
+          <span class="name">${data.name || "Unknown Player"}</span>
+          <span class="pts">${data.balance.toLocaleString()}</span>
+        `;
+        
+        leaderboardList.appendChild(li);
+        rank++;
       });
+    });
+
+    // Announcements System (One-time fetch on load)
+    async function loadAnnouncements() {
+      try {
+        const announcementsQuery = query(collection(db, "announcements"), orderBy("order", "asc"));
+        const snapshot = await getDocs(announcementsQuery);
+        
+        if (snapshot.empty) {
+          announcementsEl.textContent = "No new announcements today.";
+          return;
+        }
+
+        const texts = [];
+        snapshot.forEach(doc => texts.push(doc.data().text));
+        announcementsEl.textContent = texts.join(" • ");
+      } catch (err) {
+        console.error("Failed to load announcements:", err);
+        announcementsEl.textContent = "Could not load announcements.";
+      }
     }
 
     loadAnnouncements();
-    if (claimBtn && auth && auth.currentUser) {
-      claimBtn.onclick = function() { claimCurrency(auth.currentUser.uid); };
-    }
   </script>
 </body>
 </html>
