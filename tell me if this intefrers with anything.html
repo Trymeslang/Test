@@ -72,7 +72,7 @@
     .sidebar-currency .claim:hover:not(:disabled) { background: var(--blue-dark); }
     .sidebar-currency .claim:disabled { opacity: 0.5; cursor: not-allowed; }
     .sidebar-currency .earn-bar-wrap { margin-top: 0.75rem; }
-    .sidebar-currency .earn-bar-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
+    .sidebar-currency .earn-bar-label { display: none; }
     .sidebar-currency .earn-bar-track {
       height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; border: 1px solid rgba(59, 130, 246, 0.2);
     }
@@ -159,7 +159,7 @@
           <div class="amount" id="balance-display">0 coins</div>
           <button type="button" class="claim hidden" id="claim-btn">Claim 1 coin</button>
           <div class="earn-bar-wrap">
-            <div class="earn-bar-label" id="earn-bar-label">Earn 1 coin — 10s</div>
+            <div class="earn-bar-label" id="earn-bar-label" aria-hidden="true"></div>
             <div class="earn-bar-track">
               <div class="earn-bar-fill" id="earn-bar-fill"></div>
             </div>
@@ -367,15 +367,10 @@
 
     loadAnnouncements();
 
-    // ——— Earn bar: fill by time on site; when countdown reaches 0, show "Claim 1 coin" button only. ———
+    // ——— Earn bar: 15s fill, no timer shown, no increasing time. When full, show "Claim 1 coin" button. ———
     const earnBarFill = document.getElementById("earn-bar-fill");
-    const earnBarLabel = document.getElementById("earn-bar-label");
-    const MIN_FILL_SEC = 10;
-    const MAX_FILL_SEC = 60;
-    const STEP_SEC = 10;
-    let earnFillSeconds = MIN_FILL_SEC;
+    const FILL_SEC = 15;
     let earnBarStartAt = Date.now();
-    let earnInterval = null;
     let barFull = false;
 
     function grantOneCoin() {
@@ -387,10 +382,8 @@
     function resetEarnBar() {
       barFull = false;
       show(claimBtn, false);
-      earnFillSeconds = Math.min(MAX_FILL_SEC, earnFillSeconds + STEP_SEC);
       earnBarStartAt = Date.now();
-      earnBarFill.style.width = "0%";
-      earnBarLabel.textContent = `Earn 1 coin — ${earnFillSeconds}s`;
+      if (earnBarFill) earnBarFill.style.width = "0%";
     }
 
     claimBtn.addEventListener("click", () => {
@@ -400,13 +393,11 @@
     });
 
     function tickEarnBar() {
-      if (!earnBarFill || !earnBarLabel) return;
+      if (!earnBarFill) return;
       if (barFull) return;
       const elapsed = (Date.now() - earnBarStartAt) / 1000;
-      const progress = Math.min(1, elapsed / earnFillSeconds);
+      const progress = Math.min(1, elapsed / FILL_SEC);
       earnBarFill.style.width = (progress * 100) + "%";
-      const left = Math.ceil(Math.max(0, earnFillSeconds - elapsed));
-      earnBarLabel.textContent = left > 0 ? `Earn 1 coin — ${left}s` : "Ready — Claim 1 coin";
 
       if (progress >= 1) {
         barFull = true;
@@ -415,9 +406,7 @@
       }
     }
 
-    if (earnBarFill && earnBarLabel) {
-      setInterval(tickEarnBar, 200);
-    }
+    if (earnBarFill) setInterval(tickEarnBar, 200);
   </script>
 </body>
 </html>
