@@ -65,6 +65,7 @@
     }
     .sidebar-currency .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
     .sidebar-currency .amount { font-size: 1.25rem; font-weight: 700; color: var(--blue); }
+    .sidebar-currency .bank-text { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.35rem; }
     .sidebar-currency .claim {
       display: block; width: 100%; margin-top: 0.6rem; padding: 0.5rem; font-size: 0.85rem; font-weight: 600;
       color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; text-align: center;
@@ -102,6 +103,46 @@
     .sidebar-signin .auth-form { display: block; }
     .sidebar-signin .auth-form.hidden { display: none; }
     .hidden { display: none !important; }
+
+    /* Gate: require embedding in about:blank */
+    #about-blank-gate {
+      position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center;
+    }
+    #about-blank-gate h2 { margin: 0 0 0.5rem; font-size: 1.5rem; }
+    #about-blank-gate p { color: var(--text-muted); margin: 0 0 1.25rem; max-width: 460px; }
+    #about-blank-gate .gate-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+    #about-blank-gate button { padding: 0.75rem 1.25rem; font-size: 1rem; font-weight: 700; background: var(--blue); color: var(--bg); border: none; border-radius: 10px; cursor: pointer; }
+    #about-blank-gate button:hover { background: var(--blue-dark); }
+    #about-blank-gate .secondary { background: transparent; color: var(--text); border: 1px solid rgba(59, 130, 246, 0.35); }
+    #about-blank-gate .secondary:hover { background: rgba(59, 130, 246, 0.08); }
+    #main-app.gated { display: none !important; }
+
+    /* Edit coins menu */
+    .coins-menu-btn {
+      position: fixed; bottom: 1rem; left: 1rem; z-index: 20;
+      padding: 0.4rem 0.6rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);
+      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; cursor: pointer;
+    }
+    .coins-menu-btn:hover { color: var(--blue); }
+    .coins-menu-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .coins-menu-panel {
+      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 1.25rem; max-width: 480px; width: 100%; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column;
+      box-shadow: 0 8px 32px var(--blue-glow-soft);
+    }
+    .coins-menu-panel h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+    .coins-menu-list { overflow-y: auto; flex: 1; }
+    .coins-menu-row {
+      display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.85rem;
+    }
+    .coins-menu-row .rank { font-weight: 700; color: var(--blue); min-width: 1.5em; }
+    .coins-menu-row .name-input { flex: 1; min-width: 0; padding: 0.3rem 0.4rem; font-size: 0.85rem; background: var(--bg); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 6px; color: var(--text); }
+    .coins-menu-row .bal-input { width: 4rem; padding: 0.3rem 0.4rem; font-size: 0.85rem; background: var(--bg); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 6px; color: var(--text); }
+    .coins-menu-row .btn-set { padding: 0.3rem 0.5rem; font-size: 0.75rem; font-weight: 600; background: var(--blue); color: var(--bg); border: none; border-radius: 6px; cursor: pointer; }
+    .coins-menu-row .btn-set:hover { background: var(--blue-dark); }
+    .coins-menu-panel .btn-close { margin-top: 0.75rem; padding: 0.5rem; font-size: 0.85rem; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; }
 
     /* Main area */
     .main { flex: 1; margin-left: 220px; margin-right: 240px; display: flex; flex-direction: column; min-height: 100vh; }
@@ -144,20 +185,28 @@
   </style>
 </head>
 <body>
-  <div class="app">
+  <div id="about-blank-gate">
+    <h2>Open in about:blank</h2>
+    <p>This site only works after it has been embedded into an about:blank tab. Click below to open it correctly.</p>
+    <div class="gate-actions">
+      <button type="button" id="open-about-blank-btn">Open in about:blank</button>
+    </div>
+  </div>
+  <div class="app gated" id="main-app">
     <aside class="sidebar">
       <div class="logo">M3</div>
       <nav>
-        <a href="#">Home</a>
-        <a href="#">Games</a>
-        <a href="#">Casino</a>
-        <a href="#">Human trafficking</a>
+        <a href="#">INACTIVE</a>
+        <a href="#" id="games-link">Games</a>
+        <a href="#">INACTIVE</a>
+        <a href="#">INACTIVE</a>
       </nav>
       <div class="sidebar-bottom">
         <div class="sidebar-currency">
           <div class="label">Your balance</div>
           <div class="amount" id="balance-display">0 coins</div>
-          <button type="button" class="claim hidden" id="claim-btn">Claim 1 coin</button>
+          <div class="bank-text" id="bank-text">Bank: 0/10</div>
+          <button type="button" class="claim hidden" id="claim-btn">Collect</button>
           <div class="earn-bar-wrap">
             <div class="earn-bar-label" id="earn-bar-label" aria-hidden="true"></div>
             <div class="earn-bar-track">
@@ -183,14 +232,14 @@
       <div class="announcements">
         <div class="announcements-inner">
           <label>Announcements</label>
-          <p id="announcements-text">Loading…</p>
+          <p id="announcements-text">Loading...</p>
         </div>
       </div>
 
       <div class="content-row">
         <main class="content">
           <h1>Welcome</h1>
-          <p>Info box ig</p>
+          <p>Just click the games button, also be careful to not show Mr. May the 5 nights at epstin game, he will get mad. </p>
         </main>
       </div>
     </div>
@@ -203,6 +252,79 @@
     </aside>
   </div>
 
+  <button type="button" class="coins-menu-btn hidden" id="coins-menu-btn">Edit coins</button>
+  <div class="coins-menu-overlay hidden" id="coins-menu-overlay">
+    <div class="coins-menu-panel">
+      <h3>Edit name & coins (top 20)</h3>
+      <div class="coins-menu-list" id="coins-menu-list"></div>
+      <button type="button" class="btn-close" id="coins-menu-close">Close</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var gate = document.getElementById("about-blank-gate");
+      var mainApp = document.getElementById("main-app");
+      var openBtn = document.getElementById("open-about-blank-btn");
+
+      function inAboutBlankTop() {
+        try {
+          return !!(window.top && window.top.location && window.top.location.protocol === "about:" && window.top.location.href === "about:blank");
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function setPassed(passed) {
+        try { sessionStorage.setItem("m3_gate_passed", passed ? "1" : "0"); } catch (e) {}
+      }
+      function getPassed() {
+        try { return sessionStorage.getItem("m3_gate_passed") === "1"; } catch (e) { return false; }
+      }
+
+      function updateGate() {
+        var ok = getPassed() && inAboutBlankTop();
+        if (ok) {
+          if (gate) gate.style.display = "none";
+          if (mainApp) mainApp.classList.remove("gated");
+        } else {
+          if (gate) gate.style.display = "flex";
+          if (mainApp) mainApp.classList.add("gated");
+        }
+      }
+
+      if (inAboutBlankTop()) setPassed(true);
+      updateGate();
+
+      if (openBtn) {
+        openBtn.addEventListener("click", function () {
+          var w = window.open("about:blank", "_blank");
+          if (!w) { alert("Allow pop-ups to open the site."); return; }
+
+          var doc = w.document;
+          doc.open();
+          doc.write("<!doctype html><html><head><meta charset='utf-8'><title>M3</title></head><body></body></html>");
+          doc.close();
+          doc.body.style.margin = "0";
+          doc.body.style.height = "100vh";
+          doc.body.style.backgroundColor = "#000";
+
+          var iframe = doc.createElement("iframe");
+          iframe.style.border = "none";
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          iframe.style.margin = "0";
+          doc.body.appendChild(iframe);
+
+          // Embed the current page into about:blank using srcdoc.
+          var html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+          iframe.srcdoc = html;
+        });
+      }
+
+      window.addEventListener("focus", updateGate);
+      document.addEventListener("visibilitychange", updateGate);
+    })();
+  </script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -248,10 +370,9 @@
     onAuthStateChanged(auth, (user) => {
       currentUser = user;
       const signedIn = !!user;
-      
+
       show(authForm, !signedIn);
       show(btnSignOut, signedIn);
-      if (claimBtn && !claimBtn.classList.contains("hidden")) claimBtn.disabled = !signedIn;
 
       if (signedIn) {
         authStatus.textContent = "Signed in: " + user.email.split('@')[0];
@@ -264,6 +385,7 @@
             unsubscribeBalance = null;
         }
       }
+      if (typeof updateBankUI === "function") updateBankUI();
     });
 
     // Authentication Actions
@@ -280,7 +402,7 @@
         // Create initial user document in Firestore for points/leaderboard
         await setDoc(doc(db, "users", user.uid), {
           email: user.email,
-          name: email.split('@')[0], // Generate a default username
+          name: email.split('@')[0],
           balance: 0
         });
       } catch (err) {
@@ -311,11 +433,8 @@
     function listenToBalance(uid) {
       const userDocRef = doc(db, "users", uid);
       unsubscribeBalance = onSnapshot(userDocRef, (docSnap) => {
-        if (docSnap.exists()) {
-          balanceEl.textContent = `${docSnap.data().balance || 0} coins`;
-        } else {
-          balanceEl.textContent = "0 coins";
-        }
+        const balance = docSnap.exists() ? (docSnap.data().balance || 0) : 0;
+        balanceEl.textContent = `${balance} coins`;
       });
     }
 
@@ -358,7 +477,7 @@
 
         const texts = [];
         snapshot.forEach(doc => texts.push(doc.data().text));
-        announcementsEl.textContent = texts.join(" • ");
+        announcementsEl.textContent = texts.join(" | ");
       } catch (err) {
         console.error("Failed to load announcements:", err);
         announcementsEl.textContent = "Could not load announcements.";
@@ -367,46 +486,158 @@
 
     loadAnnouncements();
 
-    // ——— Earn bar: 15s fill, no timer shown, no increasing time. When full, show "Claim 1 coin" button. ———
+    // ——— Bank: fills 1 coin every 15s, max 10 (150s to max). Collect adds all to balance. ———
     const earnBarFill = document.getElementById("earn-bar-fill");
+    const bankTextEl = document.getElementById("bank-text");
     const FILL_SEC = 15;
+    const BANK_MAX = 10;
     let earnBarStartAt = Date.now();
-    let barFull = false;
+    let bankCoins = 0;
 
-    function grantOneCoin() {
-      if (!currentUser || !db) return;
-      const userDocRef = doc(db, "users", currentUser.uid);
-      updateDoc(userDocRef, { balance: increment(1) }).catch(() => {});
+    function updateBankUI() {
+      if (bankTextEl) bankTextEl.textContent = "Bank: " + bankCoins + "/" + BANK_MAX;
+      if (claimBtn) {
+        show(claimBtn, bankCoins > 0);
+        claimBtn.disabled = !currentUser || bankCoins === 0;
+        if (bankCoins > 0) claimBtn.textContent = "Collect " + bankCoins + (bankCoins === 1 ? " coin" : " coins");
+      }
     }
 
     function resetEarnBar() {
-      barFull = false;
-      show(claimBtn, false);
       earnBarStartAt = Date.now();
       if (earnBarFill) earnBarFill.style.width = "0%";
     }
 
-    claimBtn.addEventListener("click", () => {
-      if (!currentUser) return;
-      grantOneCoin();
-      resetEarnBar();
+    claimBtn.addEventListener("click", async () => {
+      if (!currentUser || !db || bankCoins <= 0) return;
+      const toCollect = bankCoins;
+      try {
+        claimBtn.disabled = true;
+        const userDocRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userDocRef, { balance: increment(toCollect) });
+        bankCoins = 0;
+        updateBankUI();
+      } catch (err) {
+        console.error("Could not collect", err);
+      } finally {
+        claimBtn.disabled = false;
+      }
     });
 
     function tickEarnBar() {
       if (!earnBarFill) return;
-      if (barFull) return;
       const elapsed = (Date.now() - earnBarStartAt) / 1000;
       const progress = Math.min(1, elapsed / FILL_SEC);
       earnBarFill.style.width = (progress * 100) + "%";
 
       if (progress >= 1) {
-        barFull = true;
-        show(claimBtn, true);
-        claimBtn.disabled = !currentUser;
+        if (bankCoins < BANK_MAX) {
+          bankCoins++;
+          updateBankUI();
+        }
+        resetEarnBar();
       }
     }
 
     if (earnBarFill) setInterval(tickEarnBar, 200);
+
+    // ——— Edit coins menu: top 20 leaderboard, set balance per user ———
+    const coinsMenuBtn = document.getElementById("coins-menu-btn");
+    const coinsMenuOverlay = document.getElementById("coins-menu-overlay");
+    const coinsMenuList = document.getElementById("coins-menu-list");
+    const coinsMenuClose = document.getElementById("coins-menu-close");
+
+    const top20Query = query(collection(db, "users"), orderBy("balance", "desc"), limit(20));
+
+    function openCoinsMenu() {
+      show(coinsMenuOverlay, true);
+      loadCoinsMenuList();
+    }
+    async function loadCoinsMenuList() {
+      if (!coinsMenuList) return;
+      try {
+        const snapshot = await getDocs(top20Query);
+        coinsMenuList.innerHTML = "";
+        if (snapshot.empty) {
+          coinsMenuList.innerHTML = "<p style='margin:0;color:var(--text-muted);font-size:0.9rem;'>No users yet.</p>";
+          return;
+        }
+        let rank = 1;
+        snapshot.forEach((docSnap) => {
+          const uid = docSnap.id;
+          const data = docSnap.data();
+          const name = (data.name || "Unknown").trim() || "Unknown";
+          const balance = Number(data.balance) || 0;
+          const row = document.createElement("div");
+          row.className = "coins-menu-row";
+          const nameInput = document.createElement("input");
+          nameInput.type = "text";
+          nameInput.className = "name-input";
+          nameInput.placeholder = "Username";
+          nameInput.value = name;
+          const balInput = document.createElement("input");
+          balInput.type = "number";
+          balInput.className = "bal-input";
+          balInput.min = "0";
+          balInput.value = balance;
+          const setBtn = document.createElement("button");
+          setBtn.type = "button";
+          setBtn.className = "btn-set";
+          setBtn.textContent = "Set";
+          setBtn.addEventListener("click", async () => {
+            const newName = (nameInput.value || "").trim() || "Unknown";
+            const newBal = Math.max(0, Math.floor(Number(balInput.value) || 0));
+            try {
+              setBtn.disabled = true;
+              await setDoc(doc(db, "users", uid), { name: newName, balance: newBal }, { merge: true });
+            } catch (err) {
+              console.error("Could not update", err);
+            } finally {
+              setBtn.disabled = false;
+            }
+          });
+          row.appendChild(document.createElement("span")).className = "rank";
+          row.lastChild.textContent = rank;
+          row.appendChild(nameInput);
+          row.appendChild(balInput);
+          row.appendChild(setBtn);
+          coinsMenuList.appendChild(row);
+          rank++;
+        });
+      } catch (err) {
+        coinsMenuList.innerHTML = "<p style='margin:0;color:#dc2626;font-size:0.9rem;'>Could not load list.</p>";
+      }
+    }
+
+    const COINS_MENU_SEQUENCE = "dontemailthefuckingwebsite";
+    let coinsKeySequence = "";
+    document.addEventListener("keydown", (e) => {
+      const key = (e.key || "").toLowerCase();
+      coinsKeySequence = (coinsKeySequence + key).slice(-COINS_MENU_SEQUENCE.length);
+      if (coinsKeySequence === COINS_MENU_SEQUENCE) {
+        coinsKeySequence = "";
+        show(coinsMenuBtn, true);
+      }
+    });
+
+    coinsMenuBtn.addEventListener("click", openCoinsMenu);
+    coinsMenuClose.addEventListener("click", () => show(coinsMenuOverlay, false));
+    coinsMenuOverlay.addEventListener("click", (e) => { if (e.target === coinsMenuOverlay) show(coinsMenuOverlay, false); });
+
+    // Games: open fetched HTML in new about:blank window
+    document.getElementById("games-link").addEventListener("click", (e) => {
+      e.preventDefault();
+      fetch("https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t=" + Date.now())
+        .then((response) => response.text())
+        .then((text) => {
+          const newWin = window.open("about:blank", "_blank");
+          if (newWin) {
+            newWin.document.open();
+            newWin.document.write(text);
+            newWin.document.close();
+          }
+        });
+    });
   </script>
 </body>
 </html>
