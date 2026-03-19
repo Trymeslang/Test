@@ -69,6 +69,16 @@
       color: var(--text); background: linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(29, 78, 216, 0.1) 100%);
       box-shadow: 0 6px 24px var(--blue-glow-soft), 0 0 32px rgba(59, 130, 246, 0.12);
     }
+    #games-link.games-locked {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(127, 29, 29, 0.25) 100%);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+    }
+    #games-link.games-locked:hover {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.28) 0%, rgba(127, 29, 29, 0.35) 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 24px rgba(239, 68, 68, 0.22), 0 0 32px rgba(239, 68, 68, 0.15);
+    }
 
     .sidebar-bottom { margin-top: auto; padding: 1rem 1rem 0; border-top: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; gap: 1rem; }
     .sidebar-currency {
@@ -78,6 +88,7 @@
     }
     .sidebar-currency .label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
     .sidebar-currency .amount { font-size: 1.25rem; font-weight: 700; color: var(--blue); }
+    .sidebar-currency .bank-text { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.35rem; }
     .sidebar-currency .claim {
       display: block; width: 100%; margin-top: 0.6rem; padding: 0.5rem; font-size: 0.85rem; font-weight: 600;
       color: var(--bg); background: var(--blue); border: none; border-radius: 8px; cursor: pointer; text-align: center;
@@ -115,6 +126,20 @@
     .sidebar-signin .auth-form { display: block; }
     .sidebar-signin .auth-form.hidden { display: none; }
     .hidden { display: none !important; }
+
+    /* Gate: require about:blank */
+    #about-blank-gate {
+      position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center;
+    }
+    #about-blank-gate h2 { margin: 0 0 0.5rem; font-size: 1.5rem; }
+    #about-blank-gate p { color: var(--text-muted); margin: 0 0 1.25rem; max-width: 460px; }
+    #about-blank-gate button {
+      padding: 0.75rem 1.25rem; font-size: 1rem; font-weight: 700; background: var(--blue); color: var(--bg);
+      border: none; border-radius: 10px; cursor: pointer;
+    }
+    #about-blank-gate button:hover { background: var(--blue-dark); }
+    #main-app.gated { display: none !important; }
 
     /* Main area */
     .main { flex: 1; margin-left: 220px; margin-right: 240px; display: flex; flex-direction: column; min-height: 100vh; }
@@ -154,28 +179,131 @@
     .leaderboard .rank { font-weight: 700; color: var(--blue); min-width: 1.5em; }
     .leaderboard .name { flex: 1; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .leaderboard .pts { color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+    /* Coin rush (communal bar) */
+    .coin-rush {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.12) 0%, rgba(29, 78, 216, 0.08) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 8px 32px var(--blue-glow-soft), 0 0 40px rgba(59, 130, 246, 0.12);
+      padding: 1.15rem 1.35rem;
+      margin-bottom: 1.5rem;
+    }
+    .coin-rush-header {
+      display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .coin-rush-title {
+      margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text);
+      font-family: "Orbitron", system-ui, sans-serif; letter-spacing: 0.04em;
+    }
+    .coin-rush-meta { font-size: 0.82rem; color: var(--text-muted); }
+    .coin-rush-meta strong { color: var(--blue); font-weight: 700; }
+    .coin-rush-track {
+      height: 14px; background: var(--bg); border-radius: 8px; overflow: hidden;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+    .coin-rush-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #22d3ee, var(--blue), var(--blue-dark));
+      border-radius: 8px; transition: width 0.2s ease-out;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+    }
+    .coin-rush-actions { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+    .coin-rush-donate {
+      padding: 0.55rem 1.1rem; font-size: 0.88rem; font-weight: 700; font-family: inherit;
+      color: var(--bg); background: var(--blue); border: none; border-radius: 10px; cursor: pointer;
+      box-shadow: 0 4px 16px var(--blue-glow-soft);
+    }
+    .coin-rush-donate:hover:not(:disabled) { background: var(--blue-dark); }
+    .coin-rush-donate:disabled { opacity: 0.45; cursor: not-allowed; }
+    .coin-rush-hint { font-size: 0.78rem; color: var(--text-muted); max-width: 420px; line-height: 1.4; }
+
+    /* Global community pot (lifetime counter) */
+    .global-pool {
+      background: linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.08) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08), 0 0 32px rgba(59, 130, 246, 0.08);
+      padding: 1.15rem 1.35rem;
+      margin-bottom: 1.5rem;
+    }
+    .global-pool-header {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+    .global-pool-title {
+      margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text);
+      font-family: "Orbitron", system-ui, sans-serif; letter-spacing: 0.04em;
+    }
+    .global-pool-total-wrap { text-align: right; }
+    .global-pool-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 0.15rem; }
+    .global-pool-total {
+      margin: 0; font-size: 1.75rem; font-weight: 800; font-variant-numeric: tabular-nums;
+      color: #86efac; text-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
+    }
+    .global-pool-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.25rem; }
+    .global-pool-donate {
+      padding: 0.55rem 1.1rem; font-size: 0.88rem; font-weight: 700; font-family: inherit;
+      color: var(--bg); background: #16a34a; border: none; border-radius: 10px; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.25);
+    }
+    .global-pool-donate:hover:not(:disabled) { background: #15803d; }
+    .global-pool-donate:disabled { opacity: 0.45; cursor: not-allowed; }
+    .global-pool-hint { font-size: 0.78rem; color: var(--text-muted); max-width: 420px; line-height: 1.4; margin: 0; }
+
+    /* Public leaderboard management menu */
+    .lb-menu-btn {
+      position: fixed; bottom: 1rem; right: 1rem; z-index: 20;
+      padding: 0.4rem 0.6rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);
+      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; cursor: pointer;
+    }
+    .lb-menu-btn:hover { color: var(--blue); }
+    .lb-menu-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .lb-menu-panel {
+      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 1rem;
+      max-width: 420px; width: 100%; max-height: 80vh; display: flex; flex-direction: column;
+    }
+    .lb-menu-title { margin: 0 0 0.75rem; font-size: 1rem; }
+    .lb-menu-list { overflow-y: auto; flex: 1; }
+    .lb-menu-row { display: flex; gap: 0.5rem; align-items: center; padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .lb-menu-row .name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.85rem; }
+    .lb-menu-row .remove-btn, .lb-menu-row .undo-btn {
+      padding: 0.3rem 0.5rem; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;
+    }
+    .lb-menu-row .remove-btn { background: #dc2626; color: #fff; }
+    .lb-menu-row .undo-btn { background: var(--blue); color: var(--bg); }
+    .lb-menu-close { margin-top: 0.75rem; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(59,130,246,0.3); background: transparent; color: var(--text); cursor: pointer; }
   </style>
 </head>
 <body>
+  <div id="about-blank-gate">
+    <h2>Open in about:blank</h2>
+    <p>This site must be opened in an about:blank tab. Click the button below to launch it correctly.</p>
+    <button type="button" id="open-about-blank-btn">Open in about:blank</button>
+  </div>
   <div class="ban-screen hidden" id="ban-screen">
     <h1>ACCESS DENIED</h1>
     <p>Your account has been permanently suspended for violations of our terms of service.</p>
   </div>
 
-  <div class="app" id="main-app">
+  <div class="app gated" id="main-app">
     <aside class="sidebar">
       <div class="logo">M3</div>
       <nav>
         <a href="#">Home</a>
-        <a href="#">Games</a>
+        <a href="#" id="games-link">Games</a>
         <a href="#">Casino</a>
-        <a href="#">Human trafficking</a>
+        <a href="#">INACTIVE</a>
       </nav>
       <div class="sidebar-bottom">
         <div class="sidebar-currency">
           <div class="label">Your balance</div>
           <div class="amount" id="balance-display">0 coins</div>
-          <button type="button" class="claim hidden" id="claim-btn">Claim 1 coin</button>
+          <div class="bank-text" id="bank-text">Bank: 0/10</div>
+          <button type="button" class="claim hidden" id="claim-btn">Collect</button>
           <div class="earn-bar-wrap">
             <div class="earn-bar-label" id="earn-bar-label" aria-hidden="true"></div>
             <div class="earn-bar-track">
@@ -207,6 +335,36 @@
 
       <div class="content-row">
         <main class="content">
+          <section class="coin-rush" id="coin-rush" aria-label="Communal coin rush">
+            <div class="coin-rush-header">
+              <h2 class="coin-rush-title">Coin Rush</h2>
+              <div class="coin-rush-meta">
+                <span id="coin-rush-count">0</span> / 100
+                <span style="margin: 0 0.35rem; opacity: 0.5">·</span>
+                Last in: <strong id="coin-rush-last">—</strong>
+              </div>
+            </div>
+            <div class="coin-rush-track">
+              <div class="coin-rush-fill" id="coin-rush-fill"></div>
+            </div>
+            <div class="coin-rush-actions">
+              <button type="button" class="coin-rush-donate" id="coin-rush-donate" disabled>Donate 1 coin</button>
+              <p class="coin-rush-hint" id="coin-rush-hint">Sign in to push the bar. Whoever donates the 100th coin wins 100 coins. One donation per second.</p>
+            </div>
+          </section>
+          <section class="global-pool" id="global-pool" aria-label="Global donated coins">
+            <div class="global-pool-header">
+              <h2 class="global-pool-title">Community pot</h2>
+              <div class="global-pool-total-wrap">
+                <p class="global-pool-label">Total donated ever</p>
+                <p class="global-pool-total" id="global-pool-total">0</p>
+              </div>
+            </div>
+            <div class="global-pool-actions">
+              <button type="button" class="global-pool-donate" id="global-pool-donate" disabled>Add 1 to counter</button>
+              <p class="global-pool-hint" id="global-pool-hint">Sign in to donate 1 coin—added to this shared total for everyone. One click per second.</p>
+            </div>
+          </section>
           <h1>Welcome</h1>
           <p>Info box ig</p>
         </main>
@@ -221,10 +379,74 @@
     </aside>
   </div>
 
+  <button type="button" class="lb-menu-btn" id="lb-menu-btn">Leaderboard Menu</button>
+  <div class="lb-menu-overlay hidden" id="lb-menu-overlay">
+    <div class="lb-menu-panel">
+      <h3 class="lb-menu-title">Leaderboard Manager</h3>
+      <div class="lb-menu-list" id="lb-menu-list"></div>
+      <button type="button" class="lb-menu-close" id="lb-menu-close">Close</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var gate = document.getElementById("about-blank-gate");
+      var mainApp = document.getElementById("main-app");
+      var btn = document.getElementById("open-about-blank-btn");
+
+      function inAboutBlankTop() {
+        try {
+          return !!(window.top && window.top.location && window.top.location.protocol === "about:" && window.top.location.href === "about:blank");
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function updateGate() {
+        if (inAboutBlankTop()) {
+          if (gate) gate.style.display = "none";
+          if (mainApp) mainApp.classList.remove("gated");
+        } else {
+          if (gate) gate.style.display = "flex";
+          if (mainApp) mainApp.classList.add("gated");
+        }
+      }
+
+      if (btn) {
+        btn.addEventListener("click", function () {
+          var w = window.open("about:blank", "_blank");
+          if (!w) { alert("Allow pop-ups to open the site."); return; }
+
+          var doc = w.document;
+          doc.open();
+          doc.write("<!doctype html><html><head><meta charset='utf-8'><title>M3 Dashboard</title></head><body></body></html>");
+          doc.close();
+          doc.body.style.margin = "0";
+          doc.body.style.height = "100vh";
+          doc.body.style.backgroundColor = "#000";
+
+          var iframe = doc.createElement("iframe");
+          iframe.style.border = "none";
+          iframe.style.width = "100%";
+          iframe.style.height = "100%";
+          iframe.style.margin = "0";
+          doc.body.appendChild(iframe);
+
+          var html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+          iframe.srcdoc = html;
+        });
+      }
+
+      updateGate();
+      window.addEventListener("focus", updateGate);
+      document.addEventListener("visibilitychange", updateGate);
+    })();
+  </script>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, updateDoc, collection, query, orderBy, limit, onSnapshot, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, updateDoc, collection, query, orderBy, limit, onSnapshot, getDocs, increment, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyB7-Pm2sfSobxBgyilqPpM7y5cv9TFDNVY",
@@ -243,6 +465,7 @@
 
     // DOM Elements
     const balanceEl = document.getElementById("balance-display");
+    const bankTextEl = document.getElementById("bank-text");
     const claimBtn = document.getElementById("claim-btn");
     const announcementsEl = document.getElementById("announcements-text");
     const authStatus = document.getElementById("auth-status");
@@ -253,15 +476,309 @@
     const loginEmail = document.getElementById("login-email");
     const loginPassword = document.getElementById("login-password");
     const leaderboardList = document.getElementById("leaderboard-list");
+    const lbMenuBtn = document.getElementById("lb-menu-btn");
+    const lbMenuOverlay = document.getElementById("lb-menu-overlay");
+    const lbMenuList = document.getElementById("lb-menu-list");
+    const lbMenuClose = document.getElementById("lb-menu-close");
+    const gamesLink = document.getElementById("games-link");
     const banScreen = document.getElementById("ban-screen");
     const mainApp = document.getElementById("main-app");
+    const coinRushFill = document.getElementById("coin-rush-fill");
+    const coinRushCount = document.getElementById("coin-rush-count");
+    const coinRushLast = document.getElementById("coin-rush-last");
+    const coinRushDonate = document.getElementById("coin-rush-donate");
+    const coinRushHint = document.getElementById("coin-rush-hint");
+    const globalPoolTotalEl = document.getElementById("global-pool-total");
+    const globalPoolDonate = document.getElementById("global-pool-donate");
+    const globalPoolHint = document.getElementById("global-pool-hint");
+
+    const RUSH_GOAL = 100;
+    const rushRef = doc(db, "global", "coinRush");
+    const globalPoolRef = doc(db, "global", "communityPot");
+    let rushDonateCooldownUntil = 0;
+    let rushCooldownTimer = null;
+    let globalPoolDonateCooldownUntil = 0;
+    let globalPoolCooldownTimer = null;
 
     let currentUser = null;
+    let currentUserDocData = null;
     let unsubscribeBalance = null;
 
     // Helper to toggle visibility
     function show(el, isVisible) {
       if (el) el.classList.toggle("hidden", !isVisible);
+    }
+
+    function updateRushDonateButton() {
+      if (!coinRushDonate) return;
+      const now = Date.now();
+      const cooling = now < rushDonateCooldownUntil;
+      const bal = currentUserDocData ? Number(currentUserDocData.balance) || 0 : 0;
+      if (!currentUser) {
+        coinRushDonate.disabled = true;
+        if (coinRushHint) coinRushHint.textContent = "Sign in to donate. Whoever lands the 100th coin wins 100 coins. 1 coin per second max.";
+        return;
+      }
+      if (cooling) {
+        coinRushDonate.disabled = true;
+        const ms = rushDonateCooldownUntil - now;
+        if (coinRushHint) coinRushHint.textContent = "Cooldown: wait " + (ms / 1000).toFixed(1) + "s before donating again.";
+        return;
+      }
+      if (bal < 1) {
+        coinRushDonate.disabled = true;
+        if (coinRushHint) coinRushHint.textContent = "You need at least 1 coin to donate.";
+        return;
+      }
+      coinRushDonate.disabled = false;
+      if (coinRushHint) coinRushHint.textContent = "Donate 1 coin to fill the rush. Last donor when it hits 100 wins 100 coins. One click per second.";
+    }
+
+    function renderRushState(data) {
+      const p = Math.max(0, Math.min(RUSH_GOAL - 1, Number(data && data.progress) || 0));
+      if (coinRushFill) coinRushFill.style.width = (p / RUSH_GOAL) * 100 + "%";
+      if (coinRushCount) coinRushCount.textContent = String(p);
+      if (coinRushLast) {
+        const name = data && data.lastDonorName;
+        coinRushLast.textContent = name && String(name).trim() ? String(name) : "—";
+      }
+      updateRushDonateButton();
+    }
+
+    onSnapshot(
+      rushRef,
+      (snap) => {
+        renderRushState(snap.exists() ? snap.data() : { progress: 0 });
+      },
+      (err) => {
+        console.error("Coin rush listener:", err);
+        renderRushState({ progress: 0 });
+      }
+    );
+
+    if (coinRushDonate) {
+      coinRushDonate.addEventListener("click", async () => {
+        if (!currentUser) {
+          alert("Sign in to donate.");
+          return;
+        }
+        const now = Date.now();
+        if (now < rushDonateCooldownUntil) return;
+        const bal = Number(currentUserDocData && currentUserDocData.balance) || 0;
+        if (bal < 1) {
+          alert("You need at least 1 coin.");
+          return;
+        }
+
+        rushDonateCooldownUntil = now + 1000;
+        updateRushDonateButton();
+        if (rushCooldownTimer) clearTimeout(rushCooldownTimer);
+        rushCooldownTimer = setTimeout(() => {
+          rushCooldownTimer = null;
+          updateRushDonateButton();
+        }, 1005);
+
+        const uid = currentUser.uid;
+        const userRef = doc(db, "users", uid);
+
+        try {
+          coinRushDonate.disabled = true;
+          const result = await runTransaction(db, async (transaction) => {
+            const rushSnap = await transaction.get(rushRef);
+            const userSnap = await transaction.get(userRef);
+            if (!userSnap.exists()) throw new Error("User profile missing.");
+            const uData = userSnap.data();
+            if (uData.banned === true) throw new Error("Banned.");
+            const balance = Number(uData.balance) || 0;
+            if (balance < 1) throw new Error("Insufficient coins.");
+
+            const rData = rushSnap.exists() ? rushSnap.data() : {};
+            let progress = Number(rData.progress) || 0;
+            if (progress < 0) progress = 0;
+            if (progress >= RUSH_GOAL) progress = 0;
+
+            const donorName = (uData.name && String(uData.name).trim()) || (currentUser.email ? currentUser.email.split("@")[0] : "Player");
+            const next = progress + 1;
+
+            if (next >= RUSH_GOAL) {
+              transaction.set(
+                rushRef,
+                {
+                  progress: 0,
+                  lastDonorUid: uid,
+                  lastDonorName: donorName,
+                  lastWinAt: serverTimestamp(),
+                  lastUpdated: serverTimestamp()
+                },
+                { merge: true }
+              );
+              transaction.update(userRef, { balance: increment(99) });
+              return { won: true };
+            }
+
+            transaction.set(
+              rushRef,
+              {
+                progress: next,
+                lastDonorUid: uid,
+                lastDonorName: donorName,
+                lastUpdated: serverTimestamp()
+              },
+              { merge: true }
+            );
+            transaction.update(userRef, { balance: increment(-1) });
+            return { won: false };
+          });
+
+          if (result && result.won) {
+            alert("You landed the 100th coin — +100 coins!");
+          }
+        } catch (err) {
+          console.error("Coin rush donate failed:", err);
+          firestoreDonateErrorAlert(err, "global/coinRush");
+        } finally {
+          updateRushDonateButton();
+        }
+      });
+    }
+
+    function firestoreDonateErrorAlert(err, contextDoc) {
+      const code = err && err.code;
+      const msg = (err && err.message) || "";
+      const lower = msg.toLowerCase();
+      // Firebase: "Missing or insufficient permissions" — never treat as low balance.
+      if (code === "permission-denied" || lower.includes("permission")) {
+        alert(
+          "Firestore blocked this (rules). In Console → Firestore → Rules, allow reads/writes on " +
+            contextDoc +
+            " (or match global/{doc}) and let signed-in users read/update users/{uid} including balance."
+        );
+      } else if (msg.includes("Insufficient coins") || lower.includes("insufficient coins")) {
+        alert("Not enough coins.");
+      } else if (msg.includes("User profile missing")) {
+        alert("Your account profile is missing. Try signing out and back in.");
+      } else if (msg.includes("Banned")) {
+        /* ban flow may already run */
+      } else {
+        alert("Could not complete that — try again.");
+      }
+    }
+
+    function updateGlobalPoolDonateButton() {
+      if (!globalPoolDonate) return;
+      const now = Date.now();
+      const cooling = now < globalPoolDonateCooldownUntil;
+      const bal = currentUserDocData ? Number(currentUserDocData.balance) || 0 : 0;
+      if (!currentUser) {
+        globalPoolDonate.disabled = true;
+        if (globalPoolHint) globalPoolHint.textContent = "Sign in to add 1 coin to the shared total. One donation per second.";
+        return;
+      }
+      if (cooling) {
+        globalPoolDonate.disabled = true;
+        const ms = globalPoolDonateCooldownUntil - now;
+        if (globalPoolHint) globalPoolHint.textContent = "Cooldown: wait " + (ms / 1000).toFixed(1) + "s.";
+        return;
+      }
+      if (bal < 1) {
+        globalPoolDonate.disabled = true;
+        if (globalPoolHint) globalPoolHint.textContent = "You need at least 1 coin in your balance to donate.";
+        return;
+      }
+      globalPoolDonate.disabled = false;
+      if (globalPoolHint) {
+        globalPoolHint.textContent =
+          "Spend 1 coin to bump the community total. Coins stay in the pot forever (no prize)—just a live tally.";
+      }
+    }
+
+    function renderGlobalPoolState(data) {
+      const t = Math.max(0, Math.floor(Number(data && data.total) || 0));
+      if (globalPoolTotalEl) globalPoolTotalEl.textContent = t.toLocaleString();
+      updateGlobalPoolDonateButton();
+    }
+
+    onSnapshot(
+      globalPoolRef,
+      (snap) => {
+        renderGlobalPoolState(snap.exists() ? snap.data() : { total: 0 });
+      },
+      (err) => {
+        console.error("Global pool listener:", err);
+        renderGlobalPoolState({ total: 0 });
+      }
+    );
+
+    if (globalPoolDonate) {
+      globalPoolDonate.addEventListener("click", async () => {
+        if (!currentUser) {
+          alert("Sign in first.");
+          return;
+        }
+        const now = Date.now();
+        if (now < globalPoolDonateCooldownUntil) return;
+        const bal = Number(currentUserDocData && currentUserDocData.balance) || 0;
+        if (bal < 1) {
+          alert("You need at least 1 coin.");
+          return;
+        }
+
+        globalPoolDonateCooldownUntil = now + 1000;
+        updateGlobalPoolDonateButton();
+        if (globalPoolCooldownTimer) clearTimeout(globalPoolCooldownTimer);
+        globalPoolCooldownTimer = setTimeout(() => {
+          globalPoolCooldownTimer = null;
+          updateGlobalPoolDonateButton();
+        }, 1005);
+
+        const uid = currentUser.uid;
+        const userRef = doc(db, "users", uid);
+
+        try {
+          globalPoolDonate.disabled = true;
+          await runTransaction(db, async (transaction) => {
+            const poolSnap = await transaction.get(globalPoolRef);
+            const userSnap = await transaction.get(userRef);
+            if (!userSnap.exists()) throw new Error("User profile missing.");
+            const uData = userSnap.data();
+            if (uData.banned === true) throw new Error("Banned.");
+            const balance = Number(uData.balance) || 0;
+            if (balance < 1) throw new Error("Insufficient coins.");
+
+            if (poolSnap.exists()) {
+              transaction.update(globalPoolRef, {
+                total: increment(1),
+                lastUpdated: serverTimestamp()
+              });
+            } else {
+              transaction.set(globalPoolRef, {
+                total: 1,
+                lastUpdated: serverTimestamp()
+              });
+            }
+            transaction.update(userRef, { balance: increment(-1) });
+          });
+        } catch (err) {
+          console.error("Global pool donate failed:", err);
+          firestoreDonateErrorAlert(err, "global/communityPot");
+        } finally {
+          updateGlobalPoolDonateButton();
+        }
+      });
+    }
+
+    function updateGamesStatus() {
+      if (!currentUser) {
+        if (gamesLink) gamesLink.classList.add("games-locked");
+        return;
+      }
+      const profile = currentUserDocData || {};
+      const unlocked = profile.gamesUnlocked === true;
+      if (unlocked) {
+        if (gamesLink) gamesLink.classList.remove("games-locked");
+      } else {
+        if (gamesLink) gamesLink.classList.add("games-locked");
+      }
     }
 
     // --- BAN LOGIC FUNCTION ---
@@ -298,11 +815,18 @@
       } else {
         authStatus.textContent = "Sign in to save balance";
         balanceEl.textContent = "0 coins";
+        currentUserDocData = null;
+        bankCoins = 0;
+        if (typeof updateBankUI === "function") updateBankUI();
+        if (typeof resetEarnBar === "function") resetEarnBar();
         if (unsubscribeBalance) {
             unsubscribeBalance();
             unsubscribeBalance = null;
         }
       }
+      updateGamesStatus();
+      updateRushDonateButton();
+      updateGlobalPoolDonateButton();
     });
 
     // Authentication Actions
@@ -321,7 +845,8 @@
           email: user.email,
           name: email.split('@')[0], 
           balance: 0,
-          banned: false // Default to false upon account creation
+          banned: false, // Default to false upon account creation
+          gamesUnlocked: false
         });
       } catch (err) {
         authStatus.textContent = err.message.replace("Firebase: ", "");
@@ -353,6 +878,8 @@
       unsubscribeBalance = onSnapshot(userDocRef, (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
+          currentUserDocData = data;
+          updateGamesStatus();
           
           // Check if they were banned by an admin
           if (data.banned === true) {
@@ -362,8 +889,14 @@
           
           // If not banned, update balance normally
           balanceEl.textContent = `${data.balance || 0} coins`;
+          updateRushDonateButton();
+          updateGlobalPoolDonateButton();
         } else {
           balanceEl.textContent = "0 coins";
+          currentUserDocData = null;
+          updateGamesStatus();
+          updateRushDonateButton();
+          updateGlobalPoolDonateButton();
         }
       });
     }
@@ -382,7 +915,7 @@
       snapshot.forEach((docSnap) => {
         const data = docSnap.data();
         // Optionally, don't show banned users on the leaderboard by doing: if(data.banned) return;
-        if (data.banned) return; 
+        if (data.banned || data.hiddenFromLeaderboard === true) return; 
 
         const li = document.createElement("li");
         
@@ -396,6 +929,54 @@
         rank++;
       });
     });
+
+    // Public menu to remove users from leaderboard
+    async function loadLeaderboardManager() {
+      if (!lbMenuList) return;
+      lbMenuList.innerHTML = "Loading...";
+      try {
+        const snap = await getDocs(query(collection(db, "users"), orderBy("balance", "desc"), limit(20)));
+        lbMenuList.innerHTML = "";
+        if (snap.empty) {
+          lbMenuList.innerHTML = "<div class='name'>No players yet.</div>";
+          return;
+        }
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          const uid = docSnap.id;
+          const row = document.createElement("div");
+          row.className = "lb-menu-row";
+          const hidden = data.hiddenFromLeaderboard === true;
+          row.innerHTML = `<div class="name">${data.name || "Unknown Player"}</div>`;
+          const btn = document.createElement("button");
+          btn.className = hidden ? "undo-btn" : "remove-btn";
+          btn.textContent = hidden ? "Restore" : "Remove";
+          btn.addEventListener("click", async () => {
+            btn.disabled = true;
+            try {
+              await updateDoc(doc(db, "users", uid), { hiddenFromLeaderboard: !hidden });
+              await loadLeaderboardManager();
+            } catch (err) {
+              console.error("Failed to update leaderboard visibility", err);
+              btn.disabled = false;
+            }
+          });
+          row.appendChild(btn);
+          lbMenuList.appendChild(row);
+        });
+      } catch (err) {
+        lbMenuList.innerHTML = "<div class='name'>Could not load users.</div>";
+      }
+    }
+
+    if (lbMenuBtn) {
+      lbMenuBtn.addEventListener("click", () => {
+        show(lbMenuOverlay, true);
+        loadLeaderboardManager();
+      });
+    }
+    if (lbMenuClose) lbMenuClose.addEventListener("click", () => show(lbMenuOverlay, false));
+    if (lbMenuOverlay) lbMenuOverlay.addEventListener("click", (e) => { if (e.target === lbMenuOverlay) show(lbMenuOverlay, false); });
 
     // Announcements System (One-time fetch on load)
     async function loadAnnouncements() {
@@ -419,42 +1000,105 @@
 
     loadAnnouncements();
 
-    // ——— Earn bar: 15s fill, no timer shown, no increasing time. When full, show "Claim 1 coin" button. ———
+    // Games button: costs 10 coins one-time unlock, persisted in Firebase.
+    async function openGamesWindow() {
+      const url = "https://cdn.jsdelivr.net/gh/bubbls/ugs-singlefile@main/AASINGLEFILE.html?t=" + Date.now();
+      const response = await fetch(url);
+      const text = await response.text();
+      const newWin = window.open("about:blank", "_blank");
+      if (!newWin) {
+        alert("Allow pop-ups to open Games.");
+        return;
+      }
+      newWin.document.open();
+      newWin.document.write(text);
+      newWin.document.close();
+    }
+
+    if (gamesLink) {
+      gamesLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (!currentUser) {
+          alert("Sign in first to use Games.");
+          return;
+        }
+
+        const profile = currentUserDocData || {};
+        const unlocked = profile.gamesUnlocked === true;
+        const balance = Number(profile.balance) || 0;
+        const userRef = doc(db, "users", currentUser.uid);
+
+        try {
+          if (!unlocked) {
+            if (balance < 10) {
+              alert("Games costs 10 coins to unlock. You need " + (10 - balance) + " more.");
+              return;
+            }
+            await updateDoc(userRef, {
+              balance: increment(-10),
+              gamesUnlocked: true
+            });
+          }
+
+          await openGamesWindow();
+        } catch (err) {
+          console.error("Failed to unlock/open games:", err);
+          alert("Could not open Games right now.");
+        }
+      });
+    }
+
+    // Bank: fills 1 coin every 15s, stacks to max 10, collect deposits all.
     const earnBarFill = document.getElementById("earn-bar-fill");
     const FILL_SEC = 15;
+    const BANK_MAX = 10;
     let earnBarStartAt = Date.now();
-    let barFull = false;
+    let bankCoins = 0;
 
-    function grantOneCoin() {
-      if (!currentUser || !db) return;
-      const userDocRef = doc(db, "users", currentUser.uid);
-      updateDoc(userDocRef, { balance: increment(1) }).catch(() => {});
+    function updateBankUI() {
+      if (bankTextEl) bankTextEl.textContent = "Bank: " + bankCoins + "/" + BANK_MAX;
+      if (claimBtn) {
+        show(claimBtn, bankCoins > 0);
+        claimBtn.disabled = !currentUser || bankCoins === 0;
+        if (bankCoins > 0) {
+          claimBtn.textContent = "Collect " + bankCoins + (bankCoins === 1 ? " coin" : " coins");
+        }
+      }
     }
 
     function resetEarnBar() {
-      barFull = false;
-      show(claimBtn, false);
       earnBarStartAt = Date.now();
       if (earnBarFill) earnBarFill.style.width = "0%";
     }
 
-    claimBtn.addEventListener("click", () => {
-      if (!currentUser) return;
-      grantOneCoin();
-      resetEarnBar();
+    claimBtn.addEventListener("click", async () => {
+      if (!currentUser || !db || bankCoins <= 0) return;
+      const toCollect = bankCoins;
+      try {
+        claimBtn.disabled = true;
+        const userDocRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userDocRef, { balance: increment(toCollect) });
+        bankCoins = 0;
+        updateBankUI();
+      } catch (err) {
+        console.error("Could not collect", err);
+      } finally {
+        claimBtn.disabled = false;
+      }
     });
 
     function tickEarnBar() {
       if (!earnBarFill) return;
-      if (barFull) return;
       const elapsed = (Date.now() - earnBarStartAt) / 1000;
       const progress = Math.min(1, elapsed / FILL_SEC);
       earnBarFill.style.width = (progress * 100) + "%";
 
       if (progress >= 1) {
-        barFull = true;
-        show(claimBtn, true);
-        claimBtn.disabled = !currentUser;
+        if (bankCoins < BANK_MAX) {
+          bankCoins++;
+          updateBankUI();
+        }
+        resetEarnBar();
       }
     }
 
