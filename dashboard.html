@@ -58,6 +58,15 @@
       box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
     }
     .sidebar nav { padding: 0 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .sidebar nav .nav-game-stack {
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .sidebar nav .nav-embedder {
+      font-size: 0.86rem; padding: 0.5rem 0.85rem; margin-left: 0.45rem;
+      border-left: 3px solid rgba(34, 211, 238, 0.55);
+      background: linear-gradient(90deg, rgba(34, 211, 238, 0.12) 0%, rgba(59, 130, 246, 0.06) 100%) !important;
+    }
+    .sidebar nav .nav-embedder:hover { border-left-color: rgba(103, 232, 249, 0.9); }
     .sidebar nav a {
       display: block; padding: 0.65rem 1rem; color: var(--text-muted);
       background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
@@ -78,6 +87,29 @@
       background: linear-gradient(90deg, rgba(239, 68, 68, 0.28) 0%, rgba(127, 29, 29, 0.35) 100%);
       color: #ffffff;
       box-shadow: 0 6px 24px rgba(239, 68, 68, 0.22), 0 0 32px rgba(239, 68, 68, 0.15);
+    }
+
+    /* Soundboard: red “pay to unlock” until unlocked, then same blue as other nav links */
+    #soundboard-link {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(127, 29, 29, 0.25) 100%);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+    }
+    #soundboard-link:hover {
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.28) 0%, rgba(127, 29, 29, 0.35) 100%);
+      color: #ffffff;
+      box-shadow: 0 6px 24px rgba(239, 68, 68, 0.22), 0 0 32px rgba(239, 68, 68, 0.15);
+    }
+    #soundboard-link.soundboard-unlocked {
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(29, 78, 216, 0.06) 100%);
+      border-color: rgba(59, 130, 246, 0.3);
+      color: var(--text-muted);
+      box-shadow: 0 4px 16px var(--blue-glow-soft), 0 0 24px rgba(59, 130, 246, 0.08);
+    }
+    #soundboard-link.soundboard-unlocked:hover {
+      color: var(--text);
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.18) 0%, rgba(29, 78, 216, 0.1) 100%);
+      box-shadow: 0 6px 24px var(--blue-glow-soft), 0 0 32px rgba(59, 130, 246, 0.12);
     }
 
     .sidebar-bottom { margin-top: auto; padding: 1rem 1rem 0; border-top: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; gap: 1rem; }
@@ -139,6 +171,28 @@
       border: none; border-radius: 10px; cursor: pointer;
     }
     #about-blank-gate button:hover { background: var(--blue-dark); }
+
+    /* Second step: password after about:blank (same layout as first gate) */
+    #site-password-gate {
+      position: fixed; inset: 0; background: var(--bg); z-index: 9998;
+      display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center;
+    }
+    #site-password-gate h2 { margin: 0 0 0.5rem; font-size: 1.5rem; }
+    #site-password-gate > p { color: var(--text-muted); margin: 0 0 1rem; max-width: 400px; }
+    #site-password-gate .site-pass-row {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; margin-bottom: 0.75rem;
+    }
+    #site-password-input {
+      padding: 0.65rem 0.85rem; font-size: 1rem; min-width: 220px;
+      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 10px; color: var(--text);
+    }
+    #site-password-submit {
+      padding: 0.65rem 1.15rem; font-size: 1rem; font-weight: 700; background: var(--blue); color: var(--bg);
+      border: none; border-radius: 10px; cursor: pointer;
+    }
+    #site-password-submit:hover { background: var(--blue-dark); }
+    #site-password-error { color: #f87171; font-size: 0.9rem; margin: 0; min-height: 1.25em; }
+
     #main-app.gated { display: none !important; }
 
     /* Main area */
@@ -156,9 +210,81 @@
     .announcements p { margin: 0; font-size: 0.95rem; color: var(--text); }
 
     /* Content */
-    .content-row { flex: 1; padding: 1.5rem; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .content-row { flex: 1; padding: 1.5rem; max-width: 1200px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 8rem); }
     .content h1 { font-size: 1.5rem; margin: 0 0 1rem; font-weight: 600; }
     .content p { color: var(--text-muted); margin: 0 0 0.5rem; }
+
+    .content-row > main.content {
+      display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto;
+    }
+
+    /* Lucky wheel */
+    .wheel-game {
+      width: 100%; max-width: 420px; text-align: center; margin: 0 auto;
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 16px;
+      box-shadow: 0 12px 40px var(--blue-glow-soft), 0 0 0 1px rgba(59, 130, 246, 0.08) inset;
+      padding: 1.5rem 1.25rem 1.35rem;
+    }
+    .wheel-game .wheel-title {
+      font-family: "Orbitron", sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em;
+      color: var(--blue); margin: 0 0 0.25rem; text-transform: uppercase;
+    }
+    .wheel-game .wheel-sub { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 1rem; }
+    .wheel-stage {
+      position: relative; width: min(72vw, 300px); height: min(72vw, 300px); max-width: 300px; margin: 0 auto 1.1rem;
+    }
+    .wheel-pointer {
+      position: absolute; left: 50%; top: -6px; transform: translateX(-50%); z-index: 3;
+      width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent;
+      border-top: 22px solid var(--text); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    .wheel-canvas-wrap {
+      position: absolute; inset: 10px; border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.35), 0 8px 32px rgba(0,0,0,0.45), inset 0 0 20px rgba(0,0,0,0.25);
+    }
+    #wheel-canvas { display: block; width: 100%; height: 100%; border-radius: 50%; }
+    .wheel-hub {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4;
+      width: 64px; height: 64px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+      background: linear-gradient(160deg, var(--panel) 0%, #0f172a 100%);
+      border: 2px solid rgba(59, 130, 246, 0.55);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.45), 0 0 20px var(--blue-glow-soft), inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    .wheel-hub-logo {
+      font-family: "Orbitron", sans-serif; font-weight: 900; font-size: 1.05rem; letter-spacing: 0.14em;
+      color: var(--text); line-height: 1; margin-right: -0.14em;
+      text-shadow: 0 0 18px rgba(59, 130, 246, 0.45);
+    }
+    .wheel-controls { display: flex; flex-direction: column; gap: 0.65rem; align-items: stretch; }
+    .wheel-bet-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: center; }
+    .wheel-bet-row label { font-size: 0.85rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; }
+    .wheel-bet-row input[type="number"] {
+      width: 5.5rem; padding: 0.45rem 0.5rem; font-size: 0.95rem; font-weight: 600;
+      background: var(--bg); border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 8px; color: var(--text);
+    }
+    .wheel-presets { display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: center; }
+    .wheel-presets button {
+      padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600;
+      background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35);
+      border-radius: 8px; color: var(--blue); cursor: pointer;
+    }
+    .wheel-presets button:hover { background: rgba(59, 130, 246, 0.25); color: var(--text); }
+    #wheel-spin-btn {
+      padding: 0.7rem 1.25rem; font-size: 1rem; font-weight: 800; font-family: "Orbitron", sans-serif;
+      letter-spacing: 0.06em; color: var(--bg); background: linear-gradient(180deg, var(--blue) 0%, var(--blue-dark) 100%);
+      border: none; border-radius: 10px; cursor: pointer;
+      box-shadow: 0 4px 16px var(--blue-glow);
+    }
+    #wheel-spin-btn:hover:not(:disabled) { filter: brightness(1.08); }
+    #wheel-spin-btn:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+    .wheel-result { margin: 0.75rem 0 0; min-height: 1.4em; font-size: 0.95rem; font-weight: 600; }
+    .wheel-result.win { color: #34d399; }
+    .wheel-result.lose { color: #f87171; }
+    .wheel-result.neutral { color: var(--text-muted); }
+    .wheel-hint { font-size: 0.75rem; color: var(--text-muted); margin: 0.65rem 0 0; line-height: 1.4; }
 
     /* Leaderboard */
     .leaderboard {
@@ -180,113 +306,157 @@
     .leaderboard .name { flex: 1; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .leaderboard .pts { color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
-    /* Coin rush (communal bar) */
-    .coin-rush {
-      background: linear-gradient(90deg, rgba(59, 130, 246, 0.12) 0%, rgba(29, 78, 216, 0.08) 100%);
-      border: 1px solid rgba(59, 130, 246, 0.35);
-      border-radius: 14px;
-      box-shadow: 0 8px 32px var(--blue-glow-soft), 0 0 40px rgba(59, 130, 246, 0.12);
-      padding: 1.15rem 1.35rem;
-      margin-bottom: 1.5rem;
+    /* Secret Firebase admin (opened with key sequence D-I-D-D-Y-S) */
+    #firebase-admin-overlay {
+      position: fixed; inset: 0; z-index: 10050;
+      display: flex; align-items: center; justify-content: center; padding: 1rem;
+      background: rgba(0,0,0,0.72);
     }
-    .coin-rush-header {
-      display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.75rem;
-      margin-bottom: 0.75rem;
+    #firebase-admin-overlay.hidden { display: none !important; }
+    .firebase-admin-panel {
+      width: 100%; max-width: 640px; max-height: 88vh; overflow: hidden;
+      display: flex; flex-direction: column;
+      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.45); border-radius: 14px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(59, 130, 246, 0.12);
     }
-    .coin-rush-title {
-      margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text);
-      font-family: "Orbitron", system-ui, sans-serif; letter-spacing: 0.04em;
+    .firebase-admin-header {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0.85rem 1rem; border-bottom: 1px solid rgba(59, 130, 246, 0.2);
     }
-    .coin-rush-meta { font-size: 0.82rem; color: var(--text-muted); }
-    .coin-rush-meta strong { color: var(--blue); font-weight: 700; }
-    .coin-rush-track {
-      height: 14px; background: var(--bg); border-radius: 8px; overflow: hidden;
-      border: 1px solid rgba(59, 130, 246, 0.25);
+    .firebase-admin-header h2 { margin: 0; font-size: 1rem; color: var(--blue); }
+    .firebase-admin-x {
+      width: 2.25rem; height: 2.25rem; border: none; border-radius: 8px; cursor: pointer;
+      background: rgba(239, 68, 68, 0.2); color: #fecaca; font-size: 1.35rem; line-height: 1;
     }
-    .coin-rush-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, #22d3ee, var(--blue), var(--blue-dark));
-      border-radius: 8px; transition: width 0.2s ease-out;
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.45);
+    .firebase-admin-x:hover { background: rgba(239, 68, 68, 0.35); color: #fff; }
+    .firebase-admin-warn {
+      margin: 0; padding: 0.6rem 1rem; font-size: 0.75rem; color: #fbbf24;
+      background: rgba(234, 179, 8, 0.08); border-bottom: 1px solid rgba(234, 179, 8, 0.2);
     }
-    .coin-rush-actions { margin-top: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
-    .coin-rush-donate {
-      padding: 0.55rem 1.1rem; font-size: 0.88rem; font-weight: 700; font-family: inherit;
-      color: var(--bg); background: var(--blue); border: none; border-radius: 10px; cursor: pointer;
-      box-shadow: 0 4px 16px var(--blue-glow-soft);
+    .firebase-admin-tabs { display: flex; gap: 0.35rem; padding: 0.5rem 1rem; flex-wrap: wrap; border-bottom: 1px solid rgba(59, 130, 246, 0.15); }
+    .firebase-admin-tabs button {
+      padding: 0.4rem 0.75rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; border-radius: 8px;
+      border: 1px solid rgba(59, 130, 246, 0.35); background: transparent; color: var(--text-muted);
     }
-    .coin-rush-donate:hover:not(:disabled) { background: var(--blue-dark); }
-    .coin-rush-donate:disabled { opacity: 0.45; cursor: not-allowed; }
-    .coin-rush-hint { font-size: 0.78rem; color: var(--text-muted); max-width: 420px; line-height: 1.4; }
-
-    /* Global community pot (lifetime counter) */
-    .global-pool {
-      background: linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, rgba(59, 130, 246, 0.08) 100%);
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      border-radius: 14px;
-      box-shadow: 0 8px 32px rgba(34, 197, 94, 0.08), 0 0 32px rgba(59, 130, 246, 0.08);
-      padding: 1.15rem 1.35rem;
-      margin-bottom: 1.5rem;
+    .firebase-admin-tabs button.active { background: rgba(59, 130, 246, 0.25); color: var(--text); border-color: var(--blue); }
+    .firebase-admin-tabs button:hover:not(.active) { color: var(--text); }
+    .firebase-admin-body { padding: 1rem; overflow-y: auto; flex: 1; min-height: 0; }
+    .firebase-admin-body .admin-tab-panel.hidden { display: none !important; }
+    .admin-field { margin-bottom: 0.75rem; }
+    .admin-field label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .admin-field input[type="text"], .admin-field input[type="number"], .admin-field textarea {
+      width: 100%; max-width: 100%; padding: 0.45rem 0.55rem; font-size: 0.85rem;
+      background: var(--bg); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: var(--text);
+      box-sizing: border-box;
     }
-    .global-pool-header {
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
-      margin-bottom: 0.85rem;
+    .admin-field textarea { min-height: 4rem; resize: vertical; }
+    .admin-field-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .admin-field-row input[type="checkbox"] { width: auto; }
+    .admin-btn {
+      padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; border-radius: 8px;
+      border: none; background: var(--blue); color: var(--bg); margin-right: 0.35rem; margin-bottom: 0.35rem;
     }
-    .global-pool-title {
-      margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text);
-      font-family: "Orbitron", system-ui, sans-serif; letter-spacing: 0.04em;
+    .admin-btn:hover { filter: brightness(1.08); }
+    .admin-btn.danger { background: #b91c1c; color: #fff; }
+    .admin-btn.secondary { background: rgba(59, 130, 246, 0.2); color: var(--text); border: 1px solid rgba(59, 130, 246, 0.4); }
+    .admin-users-list { max-height: 200px; overflow-y: auto; border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px; margin-bottom: 1rem; }
+    .admin-user-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      padding: 0.45rem 0.6rem; font-size: 0.78rem; border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .global-pool-total-wrap { text-align: right; }
-    .global-pool-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 0.15rem; }
-    .global-pool-total {
-      margin: 0; font-size: 1.75rem; font-weight: 800; font-variant-numeric: tabular-nums;
-      color: #86efac; text-shadow: 0 0 20px rgba(34, 197, 94, 0.35);
-    }
-    .global-pool-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 0.25rem; }
-    .global-pool-donate {
-      padding: 0.55rem 1.1rem; font-size: 0.88rem; font-weight: 700; font-family: inherit;
-      color: var(--bg); background: #16a34a; border: none; border-radius: 10px; cursor: pointer;
-      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.25);
-    }
-    .global-pool-donate:hover:not(:disabled) { background: #15803d; }
-    .global-pool-donate:disabled { opacity: 0.45; cursor: not-allowed; }
-    .global-pool-hint { font-size: 0.78rem; color: var(--text-muted); max-width: 420px; line-height: 1.4; margin: 0; }
-
-    /* Public leaderboard management menu */
-    .lb-menu-btn {
-      position: fixed; bottom: 1rem; right: 1rem; z-index: 20;
-      padding: 0.4rem 0.6rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted);
-      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; cursor: pointer;
-    }
-    .lb-menu-btn:hover { color: var(--blue); }
-    .lb-menu-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem;
-    }
-    .lb-menu-panel {
-      background: var(--panel); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 1rem;
-      max-width: 420px; width: 100%; max-height: 80vh; display: flex; flex-direction: column;
-    }
-    .lb-menu-title { margin: 0 0 0.75rem; font-size: 1rem; }
-    .lb-menu-list { overflow-y: auto; flex: 1; }
-    .lb-menu-row { display: flex; gap: 0.5rem; align-items: center; padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .lb-menu-row .name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.85rem; }
-    .lb-menu-row .remove-btn, .lb-menu-row .undo-btn {
-      padding: 0.3rem 0.5rem; font-size: 0.75rem; border-radius: 6px; border: none; cursor: pointer;
-    }
-    .lb-menu-row .remove-btn { background: #dc2626; color: #fff; }
-    .lb-menu-row .undo-btn { background: var(--blue); color: var(--bg); }
-    .lb-menu-close { margin-top: 0.75rem; padding: 0.5rem; border-radius: 8px; border: 1px solid rgba(59,130,246,0.3); background: transparent; color: var(--text); cursor: pointer; }
+    .admin-user-row:last-child { border-bottom: none; }
+    .admin-user-row button { flex-shrink: 0; padding: 0.25rem 0.5rem; font-size: 0.72rem; cursor: pointer; border-radius: 6px; border: 1px solid rgba(59,130,246,0.4); background: rgba(59,130,246,0.15); color: var(--text); }
+    .admin-user-row button:hover { background: rgba(59,130,246,0.28); }
+    .admin-status { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; min-height: 1.2em; }
+    .admin-status.err { color: #f87171; }
+    .admin-status.ok { color: #86efac; }
+    .admin-ann-row { border: 1px solid rgba(59,130,246,0.2); border-radius: 8px; padding: 0.6rem; margin-bottom: 0.65rem; }
   </style>
 </head>
 <body>
   <div id="about-blank-gate">
-    <h2>Open in about:blank</h2>
-    <p>This site must be opened in an about:blank tab. Click the button below to launch it correctly.</p>
-    <button type="button" id="open-about-blank-btn">Open in about:blank</button>
+    <h2>M3!</h2>
+    <p>M3!</p>
+    <button type="button" id="open-about-blank-btn">Open M3!</button>
+  </div>
+  <div id="site-password-gate" aria-hidden="true">
+    <h2>Site password</h2>
+    <p>Enter the password to continue.</p>
+    <div class="site-pass-row">
+      <input type="password" id="site-password-input" autocomplete="off" placeholder="Password" aria-label="Site password">
+      <button type="button" id="site-password-submit">Continue</button>
+    </div>
+    <p id="site-password-error" role="alert"></p>
   </div>
   <div class="ban-screen hidden" id="ban-screen">
     <h1>ACCESS DENIED</h1>
     <p>Your account has been permanently suspended for violations of our terms of service.</p>
+  </div>
+
+  <div id="firebase-admin-overlay" class="hidden" aria-hidden="true">
+    <div class="firebase-admin-panel" role="dialog" aria-modal="true" aria-labelledby="firebase-admin-title">
+      <div class="firebase-admin-header">
+        <h2 id="firebase-admin-title">M3 Firebase admin</h2>
+        <button type="button" id="firebase-admin-close" class="firebase-admin-x" aria-label="Close admin">×</button>
+      </div>
+      <p class="firebase-admin-warn">Secret menu: changes apply in Firestore if your security rules allow writes. Not safe on public sites—tighten rules or use only in trusted environments.</p>
+      <div class="firebase-admin-tabs">
+        <button type="button" class="admin-tab active" data-admin-tab="users">Users</button>
+        <button type="button" class="admin-tab" data-admin-tab="announcements">Announcements</button>
+        <button type="button" class="admin-tab" data-admin-tab="session">Session / bank</button>
+      </div>
+      <div class="firebase-admin-body">
+        <div id="admin-tab-users" class="admin-tab-panel">
+          <button type="button" class="admin-btn secondary" id="admin-refresh-users">Refresh user list</button>
+          <div id="admin-users-list" class="admin-users-list"></div>
+          <div class="admin-field">
+            <label for="admin-edit-uid">Edit user by UID</label>
+            <div class="admin-field-row">
+              <input type="text" id="admin-edit-uid" placeholder="Firebase Auth UID" style="flex:1;min-width:0">
+              <button type="button" class="admin-btn secondary" id="admin-load-user">Load</button>
+            </div>
+          </div>
+          <div class="admin-field">
+            <label for="admin-balance">Balance (coins)</label>
+            <input type="number" id="admin-balance" min="0" step="1" value="0">
+          </div>
+          <div class="admin-field-row">
+            <label><input type="checkbox" id="admin-banned"> Banned</label>
+            <label><input type="checkbox" id="admin-games"> Games unlocked</label>
+            <label><input type="checkbox" id="admin-soundboard"> Soundboard unlocked</label>
+            <label><input type="checkbox" id="admin-embedder"> Embedder unlocked</label>
+            <label><input type="checkbox" id="admin-hidden-lb"> Hidden from leaderboard</label>
+          </div>
+          <button type="button" class="admin-btn" id="admin-save-user">Save user document</button>
+          <p class="admin-status" id="admin-users-status"></p>
+        </div>
+        <div id="admin-tab-announcements" class="admin-tab-panel hidden">
+          <button type="button" class="admin-btn secondary" id="admin-refresh-ann">Refresh announcements</button>
+          <div id="admin-ann-list"></div>
+          <hr style="border:none;border-top:1px solid rgba(59,130,246,0.2);margin:1rem 0">
+          <div class="admin-field">
+            <label for="admin-new-ann-text">New announcement text</label>
+            <textarea id="admin-new-ann-text" placeholder="Shown in the announcements bar"></textarea>
+          </div>
+          <div class="admin-field">
+            <label for="admin-new-ann-order">Order (lower = first)</label>
+            <input type="number" id="admin-new-ann-order" value="0" step="1">
+          </div>
+          <button type="button" class="admin-btn" id="admin-add-ann">Add announcement</button>
+          <p class="admin-status" id="admin-ann-status"></p>
+        </div>
+        <div id="admin-tab-session" class="admin-tab-panel hidden">
+          <p style="font-size:0.82rem;color:var(--text-muted);margin:0 0 0.75rem">Bank coins are stored only in this browser tab until you Collect (then they go to Firestore balance).</p>
+          <div class="admin-field">
+            <label for="admin-session-bank">Session bank coins (0–10)</label>
+            <input type="number" id="admin-session-bank" min="0" max="10" step="1" value="0">
+          </div>
+          <button type="button" class="admin-btn" id="admin-apply-bank">Apply bank (this tab)</button>
+          <button type="button" class="admin-btn secondary" id="admin-reset-earn">Reset earn timer</button>
+          <p class="admin-status" id="admin-session-status"></p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="app gated" id="main-app">
@@ -294,7 +464,11 @@
       <div class="logo">M3</div>
       <nav>
         <a href="#">Home</a>
-        <a href="#" id="games-link">Games</a>
+        <div class="nav-game-stack">
+          <a href="#" id="games-link">Games</a>
+          <a href="#" id="soundboard-link" class="hidden" title="Ultimate Game Stash soundboard">Soundboard</a>
+          <a href="#" id="embedder-link" class="hidden nav-embedder">Website embedder</a>
+        </div>
         <a href="#">Casino</a>
         <a href="#">INACTIVE</a>
       </nav>
@@ -335,38 +509,32 @@
 
       <div class="content-row">
         <main class="content">
-          <section class="coin-rush" id="coin-rush" aria-label="Communal coin rush">
-            <div class="coin-rush-header">
-              <h2 class="coin-rush-title">Coin Rush</h2>
-              <div class="coin-rush-meta">
-                <span id="coin-rush-count">0</span> / 100
-                <span style="margin: 0 0.35rem; opacity: 0.5">·</span>
-                Last in: <strong id="coin-rush-last">—</strong>
+          <div class="wheel-game" aria-live="polite">
+            <h2 class="wheel-title">Lucky wheel</h2>
+            <p class="wheel-sub">Bet coins — spin — multiplier pays on your wager</p>
+            <div class="wheel-stage">
+              <div class="wheel-pointer" aria-hidden="true"></div>
+              <div class="wheel-canvas-wrap" id="wheel-canvas-wrap">
+                <canvas id="wheel-canvas" width="520" height="520" aria-label="Prize wheel"></canvas>
               </div>
+              <div class="wheel-hub" aria-hidden="true"><span class="wheel-hub-logo">M3</span></div>
             </div>
-            <div class="coin-rush-track">
-              <div class="coin-rush-fill" id="coin-rush-fill"></div>
-            </div>
-            <div class="coin-rush-actions">
-              <button type="button" class="coin-rush-donate" id="coin-rush-donate" disabled>Donate 1 coin</button>
-              <p class="coin-rush-hint" id="coin-rush-hint">Sign in to push the bar. Whoever donates the 100th coin wins 100 coins. One donation per second.</p>
-            </div>
-          </section>
-          <section class="global-pool" id="global-pool" aria-label="Global donated coins">
-            <div class="global-pool-header">
-              <h2 class="global-pool-title">Community pot</h2>
-              <div class="global-pool-total-wrap">
-                <p class="global-pool-label">Total donated ever</p>
-                <p class="global-pool-total" id="global-pool-total">0</p>
+            <div class="wheel-controls">
+              <div class="wheel-bet-row">
+                <label for="wheel-bet">Bet</label>
+                <input type="number" id="wheel-bet" min="1" step="1" value="10" inputmode="numeric">
+                <div class="wheel-presets">
+                  <button type="button" class="wheel-preset" data-bet="5">5</button>
+                  <button type="button" class="wheel-preset" data-bet="10">10</button>
+                  <button type="button" class="wheel-preset" data-bet="25">25</button>
+                  <button type="button" class="wheel-preset" data-bet="max">Max</button>
+                </div>
               </div>
+              <button type="button" id="wheel-spin-btn">Spin</button>
+              <p class="wheel-result neutral" id="wheel-result"></p>
+              <p class="wheel-hint">Sign in to play for real. Your bet is removed when you spin; the wheel pays out the multiplier × bet when it stops.</p>
             </div>
-            <div class="global-pool-actions">
-              <button type="button" class="global-pool-donate" id="global-pool-donate" disabled>Add 1 to counter</button>
-              <p class="global-pool-hint" id="global-pool-hint">Sign in to donate 1 coin—added to this shared total for everyone. One click per second.</p>
-            </div>
-          </section>
-          <h1>Welcome</h1>
-          <p>Info box ig</p>
+          </div>
         </main>
       </div>
     </div>
@@ -379,20 +547,18 @@
     </aside>
   </div>
 
-  <button type="button" class="lb-menu-btn" id="lb-menu-btn">Leaderboard Menu</button>
-  <div class="lb-menu-overlay hidden" id="lb-menu-overlay">
-    <div class="lb-menu-panel">
-      <h3 class="lb-menu-title">Leaderboard Manager</h3>
-      <div class="lb-menu-list" id="lb-menu-list"></div>
-      <button type="button" class="lb-menu-close" id="lb-menu-close">Close</button>
-    </div>
-  </div>
-
   <script>
     (function () {
       var gate = document.getElementById("about-blank-gate");
+      var pwGate = document.getElementById("site-password-gate");
       var mainApp = document.getElementById("main-app");
       var btn = document.getElementById("open-about-blank-btn");
+      var pwInput = document.getElementById("site-password-input");
+      var pwSubmit = document.getElementById("site-password-submit");
+      var pwErr = document.getElementById("site-password-error");
+
+      var SITE_ACCESS_PASSWORD = "password";
+      var PASS_OK_STORAGE = "m3_site_password_ok";
 
       function inAboutBlankTop() {
         try {
@@ -402,14 +568,67 @@
         }
       }
 
+      function passwordAccepted() {
+        try {
+          return sessionStorage.getItem(PASS_OK_STORAGE) === "1";
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function setPasswordAccepted() {
+        try {
+          sessionStorage.setItem(PASS_OK_STORAGE, "1");
+        } catch (e) { /* ignore */ }
+      }
+
       function updateGate() {
-        if (inAboutBlankTop()) {
-          if (gate) gate.style.display = "none";
+        if (!inAboutBlankTop()) {
+          if (gate) gate.style.display = "flex";
+          if (pwGate) {
+            pwGate.style.display = "none";
+            pwGate.setAttribute("aria-hidden", "true");
+          }
+          if (mainApp) mainApp.classList.add("gated");
+          return;
+        }
+
+        if (gate) gate.style.display = "none";
+
+        if (passwordAccepted()) {
+          if (pwGate) {
+            pwGate.style.display = "none";
+            pwGate.setAttribute("aria-hidden", "true");
+          }
+          if (pwErr) pwErr.textContent = "";
           if (mainApp) mainApp.classList.remove("gated");
         } else {
-          if (gate) gate.style.display = "flex";
+          if (pwGate) {
+            pwGate.style.display = "flex";
+            pwGate.setAttribute("aria-hidden", "false");
+          }
           if (mainApp) mainApp.classList.add("gated");
         }
+      }
+
+      function tryPassword() {
+        if (pwErr) pwErr.textContent = "";
+        var val = (pwInput && pwInput.value) ? pwInput.value.trim() : "";
+        if (val === SITE_ACCESS_PASSWORD) {
+          setPasswordAccepted();
+          if (pwInput) pwInput.value = "";
+          updateGate();
+        } else {
+          if (pwErr) pwErr.textContent = "Incorrect password.";
+          if (pwInput) pwInput.focus();
+        }
+      }
+
+      if (pwSubmit) pwSubmit.addEventListener("click", tryPassword);
+      if (pwInput) {
+        pwInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") tryPassword();
+        });
       }
 
       if (btn) {
@@ -446,7 +665,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, doc, setDoc, updateDoc, collection, query, orderBy, limit, onSnapshot, getDocs, increment, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, updateDoc, collection, query, orderBy, limit, onSnapshot, getDocs, increment, getDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyB7-Pm2sfSobxBgyilqPpM7y5cv9TFDNVY",
@@ -476,29 +695,14 @@
     const loginEmail = document.getElementById("login-email");
     const loginPassword = document.getElementById("login-password");
     const leaderboardList = document.getElementById("leaderboard-list");
-    const lbMenuBtn = document.getElementById("lb-menu-btn");
-    const lbMenuOverlay = document.getElementById("lb-menu-overlay");
-    const lbMenuList = document.getElementById("lb-menu-list");
-    const lbMenuClose = document.getElementById("lb-menu-close");
     const gamesLink = document.getElementById("games-link");
     const banScreen = document.getElementById("ban-screen");
     const mainApp = document.getElementById("main-app");
-    const coinRushFill = document.getElementById("coin-rush-fill");
-    const coinRushCount = document.getElementById("coin-rush-count");
-    const coinRushLast = document.getElementById("coin-rush-last");
-    const coinRushDonate = document.getElementById("coin-rush-donate");
-    const coinRushHint = document.getElementById("coin-rush-hint");
-    const globalPoolTotalEl = document.getElementById("global-pool-total");
-    const globalPoolDonate = document.getElementById("global-pool-donate");
-    const globalPoolHint = document.getElementById("global-pool-hint");
-
-    const RUSH_GOAL = 100;
-    const rushRef = doc(db, "global", "coinRush");
-    const globalPoolRef = doc(db, "global", "communityPot");
-    let rushDonateCooldownUntil = 0;
-    let rushCooldownTimer = null;
-    let globalPoolDonateCooldownUntil = 0;
-    let globalPoolCooldownTimer = null;
+    const wheelCanvas = document.getElementById("wheel-canvas");
+    const wheelCanvasWrap = document.getElementById("wheel-canvas-wrap");
+    const wheelBetInput = document.getElementById("wheel-bet");
+    const wheelSpinBtn = document.getElementById("wheel-spin-btn");
+    const wheelResultEl = document.getElementById("wheel-result");
 
     let currentUser = null;
     let currentUserDocData = null;
@@ -509,267 +713,16 @@
       if (el) el.classList.toggle("hidden", !isVisible);
     }
 
-    function updateRushDonateButton() {
-      if (!coinRushDonate) return;
-      const now = Date.now();
-      const cooling = now < rushDonateCooldownUntil;
-      const bal = currentUserDocData ? Number(currentUserDocData.balance) || 0 : 0;
-      if (!currentUser) {
-        coinRushDonate.disabled = true;
-        if (coinRushHint) coinRushHint.textContent = "Sign in to donate. Whoever lands the 100th coin wins 100 coins. 1 coin per second max.";
-        return;
-      }
-      if (cooling) {
-        coinRushDonate.disabled = true;
-        const ms = rushDonateCooldownUntil - now;
-        if (coinRushHint) coinRushHint.textContent = "Cooldown: wait " + (ms / 1000).toFixed(1) + "s before donating again.";
-        return;
-      }
-      if (bal < 1) {
-        coinRushDonate.disabled = true;
-        if (coinRushHint) coinRushHint.textContent = "You need at least 1 coin to donate.";
-        return;
-      }
-      coinRushDonate.disabled = false;
-      if (coinRushHint) coinRushHint.textContent = "Donate 1 coin to fill the rush. Last donor when it hits 100 wins 100 coins. One click per second.";
-    }
-
-    function renderRushState(data) {
-      const p = Math.max(0, Math.min(RUSH_GOAL - 1, Number(data && data.progress) || 0));
-      if (coinRushFill) coinRushFill.style.width = (p / RUSH_GOAL) * 100 + "%";
-      if (coinRushCount) coinRushCount.textContent = String(p);
-      if (coinRushLast) {
-        const name = data && data.lastDonorName;
-        coinRushLast.textContent = name && String(name).trim() ? String(name) : "—";
-      }
-      updateRushDonateButton();
-    }
-
-    onSnapshot(
-      rushRef,
-      (snap) => {
-        renderRushState(snap.exists() ? snap.data() : { progress: 0 });
-      },
-      (err) => {
-        console.error("Coin rush listener:", err);
-        renderRushState({ progress: 0 });
-      }
-    );
-
-    if (coinRushDonate) {
-      coinRushDonate.addEventListener("click", async () => {
-        if (!currentUser) {
-          alert("Sign in to donate.");
-          return;
-        }
-        const now = Date.now();
-        if (now < rushDonateCooldownUntil) return;
-        const bal = Number(currentUserDocData && currentUserDocData.balance) || 0;
-        if (bal < 1) {
-          alert("You need at least 1 coin.");
-          return;
-        }
-
-        rushDonateCooldownUntil = now + 1000;
-        updateRushDonateButton();
-        if (rushCooldownTimer) clearTimeout(rushCooldownTimer);
-        rushCooldownTimer = setTimeout(() => {
-          rushCooldownTimer = null;
-          updateRushDonateButton();
-        }, 1005);
-
-        const uid = currentUser.uid;
-        const userRef = doc(db, "users", uid);
-
-        try {
-          coinRushDonate.disabled = true;
-          const result = await runTransaction(db, async (transaction) => {
-            const rushSnap = await transaction.get(rushRef);
-            const userSnap = await transaction.get(userRef);
-            if (!userSnap.exists()) throw new Error("User profile missing.");
-            const uData = userSnap.data();
-            if (uData.banned === true) throw new Error("Banned.");
-            const balance = Number(uData.balance) || 0;
-            if (balance < 1) throw new Error("Insufficient coins.");
-
-            const rData = rushSnap.exists() ? rushSnap.data() : {};
-            let progress = Number(rData.progress) || 0;
-            if (progress < 0) progress = 0;
-            if (progress >= RUSH_GOAL) progress = 0;
-
-            const donorName = (uData.name && String(uData.name).trim()) || (currentUser.email ? currentUser.email.split("@")[0] : "Player");
-            const next = progress + 1;
-
-            if (next >= RUSH_GOAL) {
-              transaction.set(
-                rushRef,
-                {
-                  progress: 0,
-                  lastDonorUid: uid,
-                  lastDonorName: donorName,
-                  lastWinAt: serverTimestamp(),
-                  lastUpdated: serverTimestamp()
-                },
-                { merge: true }
-              );
-              transaction.update(userRef, { balance: increment(99) });
-              return { won: true };
-            }
-
-            transaction.set(
-              rushRef,
-              {
-                progress: next,
-                lastDonorUid: uid,
-                lastDonorName: donorName,
-                lastUpdated: serverTimestamp()
-              },
-              { merge: true }
-            );
-            transaction.update(userRef, { balance: increment(-1) });
-            return { won: false };
-          });
-
-          if (result && result.won) {
-            alert("You landed the 100th coin — +100 coins!");
-          }
-        } catch (err) {
-          console.error("Coin rush donate failed:", err);
-          firestoreDonateErrorAlert(err, "global/coinRush");
-        } finally {
-          updateRushDonateButton();
-        }
-      });
-    }
-
-    function firestoreDonateErrorAlert(err, contextDoc) {
-      const code = err && err.code;
-      const msg = (err && err.message) || "";
-      const lower = msg.toLowerCase();
-      // Firebase: "Missing or insufficient permissions" — never treat as low balance.
-      if (code === "permission-denied" || lower.includes("permission")) {
-        alert(
-          "Firestore blocked this (rules). In Console → Firestore → Rules, allow reads/writes on " +
-            contextDoc +
-            " (or match global/{doc}) and let signed-in users read/update users/{uid} including balance."
-        );
-      } else if (msg.includes("Insufficient coins") || lower.includes("insufficient coins")) {
-        alert("Not enough coins.");
-      } else if (msg.includes("User profile missing")) {
-        alert("Your account profile is missing. Try signing out and back in.");
-      } else if (msg.includes("Banned")) {
-        /* ban flow may already run */
-      } else {
-        alert("Could not complete that — try again.");
-      }
-    }
-
-    function updateGlobalPoolDonateButton() {
-      if (!globalPoolDonate) return;
-      const now = Date.now();
-      const cooling = now < globalPoolDonateCooldownUntil;
-      const bal = currentUserDocData ? Number(currentUserDocData.balance) || 0 : 0;
-      if (!currentUser) {
-        globalPoolDonate.disabled = true;
-        if (globalPoolHint) globalPoolHint.textContent = "Sign in to add 1 coin to the shared total. One donation per second.";
-        return;
-      }
-      if (cooling) {
-        globalPoolDonate.disabled = true;
-        const ms = globalPoolDonateCooldownUntil - now;
-        if (globalPoolHint) globalPoolHint.textContent = "Cooldown: wait " + (ms / 1000).toFixed(1) + "s.";
-        return;
-      }
-      if (bal < 1) {
-        globalPoolDonate.disabled = true;
-        if (globalPoolHint) globalPoolHint.textContent = "You need at least 1 coin in your balance to donate.";
-        return;
-      }
-      globalPoolDonate.disabled = false;
-      if (globalPoolHint) {
-        globalPoolHint.textContent =
-          "Spend 1 coin to bump the community total. Coins stay in the pot forever (no prize)—just a live tally.";
-      }
-    }
-
-    function renderGlobalPoolState(data) {
-      const t = Math.max(0, Math.floor(Number(data && data.total) || 0));
-      if (globalPoolTotalEl) globalPoolTotalEl.textContent = t.toLocaleString();
-      updateGlobalPoolDonateButton();
-    }
-
-    onSnapshot(
-      globalPoolRef,
-      (snap) => {
-        renderGlobalPoolState(snap.exists() ? snap.data() : { total: 0 });
-      },
-      (err) => {
-        console.error("Global pool listener:", err);
-        renderGlobalPoolState({ total: 0 });
-      }
-    );
-
-    if (globalPoolDonate) {
-      globalPoolDonate.addEventListener("click", async () => {
-        if (!currentUser) {
-          alert("Sign in first.");
-          return;
-        }
-        const now = Date.now();
-        if (now < globalPoolDonateCooldownUntil) return;
-        const bal = Number(currentUserDocData && currentUserDocData.balance) || 0;
-        if (bal < 1) {
-          alert("You need at least 1 coin.");
-          return;
-        }
-
-        globalPoolDonateCooldownUntil = now + 1000;
-        updateGlobalPoolDonateButton();
-        if (globalPoolCooldownTimer) clearTimeout(globalPoolCooldownTimer);
-        globalPoolCooldownTimer = setTimeout(() => {
-          globalPoolCooldownTimer = null;
-          updateGlobalPoolDonateButton();
-        }, 1005);
-
-        const uid = currentUser.uid;
-        const userRef = doc(db, "users", uid);
-
-        try {
-          globalPoolDonate.disabled = true;
-          await runTransaction(db, async (transaction) => {
-            const poolSnap = await transaction.get(globalPoolRef);
-            const userSnap = await transaction.get(userRef);
-            if (!userSnap.exists()) throw new Error("User profile missing.");
-            const uData = userSnap.data();
-            if (uData.banned === true) throw new Error("Banned.");
-            const balance = Number(uData.balance) || 0;
-            if (balance < 1) throw new Error("Insufficient coins.");
-
-            if (poolSnap.exists()) {
-              transaction.update(globalPoolRef, {
-                total: increment(1),
-                lastUpdated: serverTimestamp()
-              });
-            } else {
-              transaction.set(globalPoolRef, {
-                total: 1,
-                lastUpdated: serverTimestamp()
-              });
-            }
-            transaction.update(userRef, { balance: increment(-1) });
-          });
-        } catch (err) {
-          console.error("Global pool donate failed:", err);
-          firestoreDonateErrorAlert(err, "global/communityPot");
-        } finally {
-          updateGlobalPoolDonateButton();
-        }
-      });
-    }
-
     function updateGamesStatus() {
+      const soundboardLink = document.getElementById("soundboard-link");
+      const embedderLink = document.getElementById("embedder-link");
       if (!currentUser) {
         if (gamesLink) gamesLink.classList.add("games-locked");
+        if (soundboardLink) {
+          soundboardLink.classList.add("hidden");
+          soundboardLink.classList.remove("soundboard-unlocked");
+        }
+        if (embedderLink) embedderLink.classList.add("hidden");
         return;
       }
       const profile = currentUserDocData || {};
@@ -778,6 +731,22 @@
         if (gamesLink) gamesLink.classList.remove("games-locked");
       } else {
         if (gamesLink) gamesLink.classList.add("games-locked");
+      }
+      /* Soundboard: show when signed in; label shows cost until permanently unlocked */
+      if (soundboardLink) {
+        soundboardLink.classList.toggle("hidden", !currentUser);
+        if (currentUser) {
+          const sbUnlocked = profile.soundboardUnlocked === true;
+          soundboardLink.classList.toggle("soundboard-unlocked", sbUnlocked);
+          soundboardLink.textContent = sbUnlocked ? "Soundboard" : "Soundboard (50 coins)";
+          soundboardLink.title = sbUnlocked
+            ? "Open Ultimate Game Stash soundboard (unlocked)"
+            : "Unlock & open Soundboard permanently — 50 coins (one time)";
+        }
+      }
+      if (embedderLink) {
+        if (profile.embedderUnlocked === true) embedderLink.classList.remove("hidden");
+        else embedderLink.classList.add("hidden");
       }
     }
 
@@ -825,8 +794,6 @@
         }
       }
       updateGamesStatus();
-      updateRushDonateButton();
-      updateGlobalPoolDonateButton();
     });
 
     // Authentication Actions
@@ -846,7 +813,9 @@
           name: email.split('@')[0], 
           balance: 0,
           banned: false, // Default to false upon account creation
-          gamesUnlocked: false
+          gamesUnlocked: false,
+          soundboardUnlocked: false,
+          embedderUnlocked: false
         });
       } catch (err) {
         authStatus.textContent = err.message.replace("Firebase: ", "");
@@ -889,14 +858,10 @@
           
           // If not banned, update balance normally
           balanceEl.textContent = `${data.balance || 0} coins`;
-          updateRushDonateButton();
-          updateGlobalPoolDonateButton();
         } else {
           balanceEl.textContent = "0 coins";
           currentUserDocData = null;
           updateGamesStatus();
-          updateRushDonateButton();
-          updateGlobalPoolDonateButton();
         }
       });
     }
@@ -930,54 +895,6 @@
       });
     });
 
-    // Public menu to remove users from leaderboard
-    async function loadLeaderboardManager() {
-      if (!lbMenuList) return;
-      lbMenuList.innerHTML = "Loading...";
-      try {
-        const snap = await getDocs(query(collection(db, "users"), orderBy("balance", "desc"), limit(20)));
-        lbMenuList.innerHTML = "";
-        if (snap.empty) {
-          lbMenuList.innerHTML = "<div class='name'>No players yet.</div>";
-          return;
-        }
-        snap.forEach((docSnap) => {
-          const data = docSnap.data();
-          const uid = docSnap.id;
-          const row = document.createElement("div");
-          row.className = "lb-menu-row";
-          const hidden = data.hiddenFromLeaderboard === true;
-          row.innerHTML = `<div class="name">${data.name || "Unknown Player"}</div>`;
-          const btn = document.createElement("button");
-          btn.className = hidden ? "undo-btn" : "remove-btn";
-          btn.textContent = hidden ? "Restore" : "Remove";
-          btn.addEventListener("click", async () => {
-            btn.disabled = true;
-            try {
-              await updateDoc(doc(db, "users", uid), { hiddenFromLeaderboard: !hidden });
-              await loadLeaderboardManager();
-            } catch (err) {
-              console.error("Failed to update leaderboard visibility", err);
-              btn.disabled = false;
-            }
-          });
-          row.appendChild(btn);
-          lbMenuList.appendChild(row);
-        });
-      } catch (err) {
-        lbMenuList.innerHTML = "<div class='name'>Could not load users.</div>";
-      }
-    }
-
-    if (lbMenuBtn) {
-      lbMenuBtn.addEventListener("click", () => {
-        show(lbMenuOverlay, true);
-        loadLeaderboardManager();
-      });
-    }
-    if (lbMenuClose) lbMenuClose.addEventListener("click", () => show(lbMenuOverlay, false));
-    if (lbMenuOverlay) lbMenuOverlay.addEventListener("click", (e) => { if (e.target === lbMenuOverlay) show(lbMenuOverlay, false); });
-
     // Announcements System (One-time fetch on load)
     async function loadAnnouncements() {
       try {
@@ -999,6 +916,113 @@
     }
 
     loadAnnouncements();
+
+    const SOUNDBOARD_UNLOCK_COST = 50;
+
+    /**
+     * Ultimate Game Stash / genizy soundboard markup — opened in about:blank.
+     * Resources load via base href from jsDelivr (sounds.js, main.js, style.css).
+     */
+    function getUltimateGameStashSoundboardHtml() {
+      const sc = "</scr" + "ipt>";
+      return (
+        "<!DOCTYPE html>\n" +
+        "<!-- Ultimate Game Stash file -->\n" +
+        "<!-- Doc: https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->\n" +
+        '<html lang="en">\n\n<head>\n' +
+        '    <base href="https://cdn.jsdelivr.net/gh/genizy/soundboard@main/">\n' +
+        '    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5521219086088837" crossorigin="anonymous">' +
+        sc +
+        "\n" +
+        '    <script async src="https://www.googletagmanager.com/gtag/js?id=G-">' +
+        sc +
+        "\n" +
+        '    <meta charset="UTF-8">\n' +
+        "    <title>Soundboard</title>\n" +
+        '    <script src="sounds.js" type="module">' +
+        sc +
+        "\n" +
+        '    <script src="main.js" type="module">' +
+        sc +
+        "\n" +
+        '    <link href="style.css" rel="stylesheet">\n' +
+        "</head>\n\n<body>\n" +
+        '    <div id="controls">\n' +
+        '        <button id="toggleFavorites" class="control-button favorites-toggle">⭐ Favorites: OFF</button>\n' +
+        '        <button id="toggleButton" class="control-button overlap-toggle">🔇 Overlap: OFF</button>\n' +
+        '        <button id="stopButton" class="control-button stop-button">⏹️ Stop All Sounds</button>\n' +
+        '        <input id="searchInput" type="text" placeholder="Search sounds...">\n' +
+        "    </div>\n" +
+        '    <div id="soundboard"></div>\n' +
+        "</body>\n\n</html>\n"
+      );
+    }
+
+    function openPaidSoundboardWindow() {
+      const newWin = window.open("about:blank", "_blank");
+      if (!newWin) {
+        alert("Allow pop-ups to open the Soundboard.");
+        return;
+      }
+      newWin.document.open();
+      newWin.document.write(getUltimateGameStashSoundboardHtml());
+      newWin.document.close();
+    }
+
+    /** Built-in Website embedder page (written into about:blank). */
+    function getEmbedderPageHtml() {
+      return (
+        "<!DOCTYPE html>\n" +
+          '<html lang="en">\n<head>\n<meta charset="UTF-8">\n<title>Website Embedder</title>\n<style>\n' +
+          "body { font-family: Arial, sans-serif; margin: 20px; }\n" +
+          "input, button { padding: 8px; font-size: 16px; margin: 5px 0; }\n" +
+          "iframe { width: 100%; height: 700px; border: 1px solid #ccc; margin-top: 20px; }\n" +
+          "</style>\n</head>\n<body>\n<h2>Website Embedder</h2>\n" +
+          '<input type="text" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)" size="50">\n<br>\n' +
+          '<button type="button" id="btnOpen">Open in about:blank</button>\n' +
+          '<button type="button" id="btnEmbed">Embed Below</button>\n' +
+          '<div id="embedContainer"></div>\n' +
+          "<scr" +
+          "ipt>\n" +
+          "function sanitizeURL(url) {\n" +
+          "  try { return new URL(url).href; } catch (e) {\n" +
+          '    alert("Invalid URL. Please include http:// or https://");\n' +
+          "    return null;\n" +
+          "  }\n" +
+          "}\n" +
+          "function openAboutBlank() {\n" +
+          '  var url = sanitizeURL(document.getElementById("urlInput").value);\n' +
+          "  if (!url) return;\n" +
+          '  var newTab = window.open("about:blank", "_blank");\n' +
+          "  if (!newTab) { alert('Allow pop-ups.'); return; }\n" +
+          '  var h = "<!DOCTYPE html><html><head><meta charset=\\"UTF-8\\"><title>Embedded Site</title><style>body,html{margin:0;padding:0;height:100%;}iframe{border:none;width:100%;height:100%;}</style></head><body><iframe src=\\"" + url.replace(/"/g, "&quot;") + "\\" allowfullscreen></iframe></body></html>";\n' +
+          "  newTab.document.open();\n" +
+          "  newTab.document.write(h);\n" +
+          "  newTab.document.close();\n" +
+          "}\n" +
+          "function embedBelow() {\n" +
+          '  var url = sanitizeURL(document.getElementById("urlInput").value);\n' +
+          "  if (!url) return;\n" +
+          '  var u = url.replace(/"/g, "&quot;");\n' +
+          '  document.getElementById("embedContainer").innerHTML = "<iframe src=\\"" + u + "\\" allowfullscreen></iframe>";\n' +
+          "}\n" +
+          'document.getElementById("btnOpen").onclick = openAboutBlank;\n' +
+          'document.getElementById("btnEmbed").onclick = embedBelow;\n' +
+          "</scr" +
+          "ipt>\n</body>\n</html>"
+      );
+    }
+
+    function openEmbedderWindow() {
+      const w = window.open("about:blank", "_blank");
+      if (!w) {
+        alert("Allow pop-ups to open the Website embedder.");
+        return;
+      }
+      w.document.open();
+      w.document.write(getEmbedderPageHtml());
+      w.document.close();
+    }
 
     // Games button: costs 10 coins one-time unlock, persisted in Firebase.
     async function openGamesWindow() {
@@ -1045,6 +1069,254 @@
           console.error("Failed to unlock/open games:", err);
           alert("Could not open Games right now.");
         }
+      });
+    }
+
+    const soundboardNav = document.getElementById("soundboard-link");
+    if (soundboardNav) {
+      soundboardNav.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (!currentUser) {
+          alert("Sign in first.");
+          return;
+        }
+        const profile = currentUserDocData || {};
+        const userRef = doc(db, "users", currentUser.uid);
+
+        if (profile.soundboardUnlocked === true) {
+          try {
+            openPaidSoundboardWindow();
+          } catch (err) {
+            console.error("Soundboard open failed:", err);
+            alert("Could not open Soundboard—allow pop-ups.");
+          }
+          return;
+        }
+
+        const balance = Math.floor(Number(profile.balance)) || 0;
+        if (balance < SOUNDBOARD_UNLOCK_COST) {
+          alert(
+            "Soundboard costs " +
+              SOUNDBOARD_UNLOCK_COST +
+              " coins to unlock forever. You need " +
+              (SOUNDBOARD_UNLOCK_COST - balance) +
+              " more."
+          );
+          return;
+        }
+
+        try {
+          await updateDoc(userRef, {
+            balance: increment(-SOUNDBOARD_UNLOCK_COST),
+            soundboardUnlocked: true
+          });
+          currentUserDocData = {
+            ...(currentUserDocData || {}),
+            soundboardUnlocked: true,
+            balance: Math.max(0, balance - SOUNDBOARD_UNLOCK_COST)
+          };
+          updateGamesStatus();
+          openPaidSoundboardWindow();
+        } catch (err) {
+          console.error("Soundboard unlock failed:", err);
+          alert("Could not unlock Soundboard—check connection or Firestore rules.");
+        }
+      });
+    }
+
+    const embedderNav = document.getElementById("embedder-link");
+    if (embedderNav) {
+      embedderNav.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!currentUser) {
+          alert("Sign in first.");
+          return;
+        }
+        if ((currentUserDocData || {}).embedderUnlocked !== true) {
+          alert("The Website embedder isn’t unlocked for your account yet.");
+          return;
+        }
+        try {
+          openEmbedderWindow();
+        } catch (err) {
+          console.error("Embedder open failed:", err);
+          alert("Could not open embedder—allow pop-ups.");
+        }
+      });
+    }
+
+    // --- Lucky wheel (bet balance, spin, payout via Firestore) ---
+    const WHEEL_SEGMENTS = [
+      { label: "0×", mult: 0, color: "#7f1d1d" },
+      { label: "½×", mult: 0.5, color: "#57534e" },
+      { label: "1×", mult: 1, color: "#475569" },
+      { label: "1×", mult: 1, color: "#64748b" },
+      { label: "1½×", mult: 1.5, color: "#0d9488" },
+      { label: "2×", mult: 2, color: "#2563eb" },
+      { label: "3×", mult: 3, color: "#7c3aed" },
+      { label: "0×", mult: 0, color: "#991b1b" },
+    ];
+
+    let wheelRotationDeg = 0;
+    let wheelSpinning = false;
+
+    function normDeg(d) {
+      return ((d % 360) + 360) % 360;
+    }
+
+    function drawWheelCanvas() {
+      if (!wheelCanvas) return;
+      const ctx = wheelCanvas.getContext("2d");
+      const w = wheelCanvas.width;
+      const h = wheelCanvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const r = Math.min(w, h) / 2 - 4;
+      const n = WHEEL_SEGMENTS.length;
+      const slice = (Math.PI * 2) / n;
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(cx, cy);
+      for (let i = 0; i < n; i++) {
+        const seg = WHEEL_SEGMENTS[i];
+        const a0 = -Math.PI / 2 + i * slice;
+        const a1 = a0 + slice;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, r, a0, a1);
+        ctx.closePath();
+        ctx.fillStyle = seg.color;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(15,23,42,0.65)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.save();
+        ctx.rotate(a0 + slice / 2);
+        ctx.fillStyle = "rgba(248,250,252,0.92)";
+        ctx.font = "bold 26px system-ui, sans-serif";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(seg.label, r - 28, 0);
+        ctx.restore();
+      }
+      ctx.restore();
+    }
+
+    function applyWheelRotation() {
+      if (wheelCanvasWrap) {
+        wheelCanvasWrap.style.transform = "rotate(" + wheelRotationDeg + "deg)";
+      }
+    }
+
+    function payoutForSegment(mult, bet) {
+      return Math.floor(bet * mult);
+    }
+
+    function animateWheelTo(targetDeg, durationMs, done) {
+      const start = wheelRotationDeg;
+      const delta = targetDeg - start;
+      const t0 = performance.now();
+      function frame(now) {
+        const t = Math.min(1, (now - t0) / durationMs);
+        const ease = 1 - Math.pow(1 - t, 3);
+        wheelRotationDeg = start + delta * ease;
+        applyWheelRotation();
+        if (t < 1) requestAnimationFrame(frame);
+        else done();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function setWheelResult(text, kind) {
+      if (!wheelResultEl) return;
+      wheelResultEl.textContent = text;
+      wheelResultEl.classList.remove("win", "lose", "neutral");
+      wheelResultEl.classList.add(kind || "neutral");
+    }
+
+    drawWheelCanvas();
+    applyWheelRotation();
+
+    document.querySelectorAll(".wheel-preset").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var v = btn.getAttribute("data-bet");
+        if (v === "max") {
+          var bal = currentUser ? Math.floor(Number((currentUserDocData || {}).balance) || 0) : 0;
+          if (wheelBetInput) wheelBetInput.value = String(Math.max(1, bal));
+        } else if (wheelBetInput) wheelBetInput.value = v;
+      });
+    });
+
+    if (wheelSpinBtn) {
+      wheelSpinBtn.addEventListener("click", async function () {
+        if (wheelSpinning) return;
+        if (!currentUser) {
+          setWheelResult("Sign in to bet coins.", "neutral");
+          alert("Sign in to play the wheel.");
+          return;
+        }
+        var bet = parseInt(wheelBetInput && wheelBetInput.value, 10);
+        if (!Number.isFinite(bet) || bet < 1) {
+          setWheelResult("Enter a bet of at least 1 coin.", "neutral");
+          return;
+        }
+        var balance = Math.floor(Number((currentUserDocData || {}).balance) || 0);
+        if (balance < bet) {
+          setWheelResult("Not enough coins (need " + bet + ", have " + balance + ").", "lose");
+          return;
+        }
+
+        var n = WHEEL_SEGMENTS.length;
+        var winIndex = Math.floor(Math.random() * n);
+        var per = 360 / n;
+        var land = normDeg(-(winIndex + 0.5) * per);
+        var cur = normDeg(wheelRotationDeg);
+        var delta = normDeg(land - cur);
+        var SPINS = 5 + Math.floor(Math.random() * 2);
+        var targetRotation = wheelRotationDeg + SPINS * 360 + delta;
+
+        wheelSpinning = true;
+        wheelSpinBtn.disabled = true;
+        setWheelResult("Spinning…", "neutral");
+
+        try {
+          await updateDoc(doc(db, "users", currentUser.uid), { balance: increment(-bet) });
+        } catch (err) {
+          console.error("Wheel bet failed", err);
+          setWheelResult("Could not place bet — try again.", "lose");
+          wheelSpinning = false;
+          wheelSpinBtn.disabled = false;
+          return;
+        }
+
+        var seg = WHEEL_SEGMENTS[winIndex];
+        var payout = payoutForSegment(seg.mult, bet);
+
+        animateWheelTo(targetRotation, 4200, async function () {
+          wheelRotationDeg = targetRotation;
+          try {
+            if (payout > 0) {
+              await updateDoc(doc(db, "users", currentUser.uid), { balance: increment(payout) });
+            }
+          } catch (err) {
+            console.error("Wheel payout failed", err);
+            setWheelResult("Spin landed on " + seg.label + " — payout sync failed. Refresh.", "lose");
+            wheelSpinning = false;
+            wheelSpinBtn.disabled = false;
+            return;
+          }
+
+          var net = payout - bet;
+          if (net > 0) {
+            setWheelResult(seg.label + " — you won +" + net + " coins (paid " + payout + ").", "win");
+          } else if (net < 0) {
+            setWheelResult(seg.label + " — you lost " + Math.abs(net) + " coins.", "lose");
+          } else {
+            setWheelResult(seg.label + " — break even.", "neutral");
+          }
+          wheelSpinning = false;
+          wheelSpinBtn.disabled = false;
+        });
       });
     }
 
@@ -1103,6 +1375,306 @@
     }
 
     if (earnBarFill) setInterval(tickEarnBar, 200);
+
+    // --- Secret Firebase admin: type D → I → D → D → Y → S (letters only, not in other inputs) ---
+    const ADMIN_KEY_SEQUENCE = ["d", "i", "d", "d", "y", "s"];
+    let adminKeyProgress = 0;
+
+    const firebaseAdminOverlay = document.getElementById("firebase-admin-overlay");
+    const adminCloseBtn = document.getElementById("firebase-admin-close");
+    const adminUsersStatus = document.getElementById("admin-users-status");
+    const adminAnnStatus = document.getElementById("admin-ann-status");
+    const adminSessionStatus = document.getElementById("admin-session-status");
+
+    function setAdminStatus(el, msg, kind) {
+      if (!el) return;
+      el.textContent = msg || "";
+      el.className = "admin-status" + (kind === "err" ? " err" : kind === "ok" ? " ok" : "");
+    }
+
+    function openFirebaseAdmin() {
+      if (!firebaseAdminOverlay) return;
+      firebaseAdminOverlay.classList.remove("hidden");
+      firebaseAdminOverlay.setAttribute("aria-hidden", "false");
+      adminKeyProgress = 0;
+      const sb = document.getElementById("admin-session-bank");
+      if (sb) sb.value = String(bankCoins);
+    }
+
+    function closeFirebaseAdmin() {
+      if (!firebaseAdminOverlay) return;
+      firebaseAdminOverlay.classList.add("hidden");
+      firebaseAdminOverlay.setAttribute("aria-hidden", "true");
+      adminKeyProgress = 0;
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (firebaseAdminOverlay && !firebaseAdminOverlay.classList.contains("hidden")) {
+        if (e.key === "Escape") {
+          closeFirebaseAdmin();
+          e.preventDefault();
+        }
+        return;
+      }
+      const t = e.target;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+      const k = e.key.toLowerCase();
+      if (k.length !== 1 || k < "a" || k > "z") return;
+      if (k === ADMIN_KEY_SEQUENCE[adminKeyProgress]) {
+        adminKeyProgress++;
+        if (adminKeyProgress >= ADMIN_KEY_SEQUENCE.length) {
+          openFirebaseAdmin();
+          adminKeyProgress = 0;
+        }
+      } else {
+        adminKeyProgress = k === ADMIN_KEY_SEQUENCE[0] ? 1 : 0;
+      }
+    });
+
+    if (adminCloseBtn) adminCloseBtn.addEventListener("click", closeFirebaseAdmin);
+    if (firebaseAdminOverlay) {
+      firebaseAdminOverlay.addEventListener("click", (e) => {
+        if (e.target === firebaseAdminOverlay) closeFirebaseAdmin();
+      });
+    }
+
+    document.querySelectorAll("[data-admin-tab]").forEach((tabBtn) => {
+      tabBtn.addEventListener("click", () => {
+        const tab = tabBtn.getAttribute("data-admin-tab");
+        document.querySelectorAll("[data-admin-tab]").forEach((b) => b.classList.toggle("active", b === tabBtn));
+        document.getElementById("admin-tab-users").classList.toggle("hidden", tab !== "users");
+        document.getElementById("admin-tab-announcements").classList.toggle("hidden", tab !== "announcements");
+        document.getElementById("admin-tab-session").classList.toggle("hidden", tab !== "session");
+        if (tab === "session") {
+          const sb = document.getElementById("admin-session-bank");
+          if (sb) sb.value = String(bankCoins);
+        }
+      });
+    });
+
+    function adminFillUserForm(uid, data) {
+      const uidEl = document.getElementById("admin-edit-uid");
+      const balEl = document.getElementById("admin-balance");
+      if (uidEl) uidEl.value = uid || "";
+      if (balEl) balEl.value = String(Math.floor(Number(data && data.balance)) || 0);
+      const gb = (id, on) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = !!on;
+      };
+      gb("admin-banned", data && data.banned === true);
+      gb("admin-games", data && data.gamesUnlocked === true);
+      gb("admin-soundboard", data && data.soundboardUnlocked === true);
+      gb("admin-embedder", data && data.embedderUnlocked === true);
+      gb("admin-hidden-lb", data && data.hiddenFromLeaderboard === true);
+    }
+
+    async function adminLoadUserByUid(uid) {
+      const u = (uid || "").trim();
+      if (!u) {
+        setAdminStatus(adminUsersStatus, "Enter a user UID.", "err");
+        return;
+      }
+      setAdminStatus(adminUsersStatus, "Loading…", "");
+      try {
+        const snap = await getDoc(doc(db, "users", u));
+        if (!snap.exists()) {
+          setAdminStatus(adminUsersStatus, "No user document for that UID.", "err");
+          return;
+        }
+        adminFillUserForm(u, snap.data());
+        setAdminStatus(adminUsersStatus, "Loaded.", "ok");
+      } catch (err) {
+        console.error(err);
+        setAdminStatus(adminUsersStatus, err.message || "Load failed", "err");
+      }
+    }
+
+    document.getElementById("admin-refresh-users")?.addEventListener("click", async () => {
+      const listEl = document.getElementById("admin-users-list");
+      if (!listEl) return;
+      setAdminStatus(adminUsersStatus, "Loading list…", "");
+      listEl.innerHTML = "";
+      try {
+        const snap = await getDocs(query(collection(db, "users"), orderBy("balance", "desc"), limit(80)));
+        if (snap.empty) {
+          listEl.innerHTML = "<div style='padding:0.5rem;font-size:0.8rem;color:var(--text-muted)'>No users.</div>";
+          setAdminStatus(adminUsersStatus, "Done.", "ok");
+          return;
+        }
+        snap.forEach((d) => {
+          const data = d.data();
+          const uid = d.id;
+          const row = document.createElement("div");
+          row.className = "admin-user-row";
+          const left = document.createElement("span");
+          left.style.flex = "1";
+          left.style.minWidth = "0";
+          left.style.overflow = "hidden";
+          left.style.textOverflow = "ellipsis";
+          const banTag = data.banned ? " · BANNED" : "";
+          left.textContent = (data.name || data.email || uid.slice(0, 8)) + " · " + (data.balance ?? 0) + " coins" + banTag;
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = "Edit";
+          btn.addEventListener("click", () => adminLoadUserByUid(uid));
+          row.appendChild(left);
+          row.appendChild(btn);
+          listEl.appendChild(row);
+        });
+        setAdminStatus(adminUsersStatus, "Loaded " + snap.size + " users.", "ok");
+      } catch (err) {
+        console.error(err);
+        listEl.innerHTML = "<div style='padding:0.5rem;color:#f87171;font-size:0.8rem'>Failed (rules or network).</div>";
+        setAdminStatus(adminUsersStatus, err.message || "Failed", "err");
+      }
+    });
+
+    document.getElementById("admin-load-user")?.addEventListener("click", () => {
+      const uid = document.getElementById("admin-edit-uid")?.value || "";
+      adminLoadUserByUid(uid);
+    });
+
+    document.getElementById("admin-save-user")?.addEventListener("click", async () => {
+      const uid = (document.getElementById("admin-edit-uid")?.value || "").trim();
+      if (!uid) {
+        setAdminStatus(adminUsersStatus, "UID required.", "err");
+        return;
+      }
+      const bal = Math.max(0, Math.floor(Number(document.getElementById("admin-balance")?.value) || 0));
+      const payload = {
+        balance: bal,
+        banned: document.getElementById("admin-banned")?.checked === true,
+        gamesUnlocked: document.getElementById("admin-games")?.checked === true,
+        soundboardUnlocked: document.getElementById("admin-soundboard")?.checked === true,
+        embedderUnlocked: document.getElementById("admin-embedder")?.checked === true,
+        hiddenFromLeaderboard: document.getElementById("admin-hidden-lb")?.checked === true
+      };
+      setAdminStatus(adminUsersStatus, "Saving…", "");
+      try {
+        await updateDoc(doc(db, "users", uid), payload);
+        if (currentUser && currentUser.uid === uid) {
+          currentUserDocData = { ...(currentUserDocData || {}), ...payload };
+          updateGamesStatus();
+          balanceEl.textContent = `${bal} coins`;
+        }
+        setAdminStatus(adminUsersStatus, "Saved.", "ok");
+      } catch (err) {
+        console.error(err);
+        setAdminStatus(adminUsersStatus, err.message || "Save failed", "err");
+      }
+    });
+
+    async function adminRenderAnnouncements() {
+      const listEl = document.getElementById("admin-ann-list");
+      if (!listEl) return;
+      listEl.innerHTML = "";
+      try {
+        const snap = await getDocs(query(collection(db, "announcements"), orderBy("order", "asc")));
+        if (snap.empty) {
+          listEl.innerHTML = "<p style='font-size:0.8rem;color:var(--text-muted)'>No announcement docs.</p>";
+          return;
+        }
+        snap.forEach((dSnap) => {
+          const id = dSnap.id;
+          const d = dSnap.data();
+          const wrap = document.createElement("div");
+          wrap.className = "admin-ann-row";
+          const ta = document.createElement("textarea");
+          ta.rows = 2;
+          ta.value = d.text || "";
+          ta.dataset.annId = id;
+          const orderRow = document.createElement("div");
+          orderRow.className = "admin-field-row";
+          orderRow.style.marginTop = "0.35rem";
+          const ord = document.createElement("input");
+          ord.type = "number";
+          ord.value = String(d.order ?? 0);
+          ord.style.width = "5rem";
+          const up = document.createElement("button");
+          up.type = "button";
+          up.className = "admin-btn secondary";
+          up.textContent = "Update";
+          up.addEventListener("click", async () => {
+            setAdminStatus(adminAnnStatus, "Updating…", "");
+            try {
+              await updateDoc(doc(db, "announcements", id), {
+                text: ta.value.trim(),
+                order: Math.floor(Number(ord.value) || 0)
+              });
+              await loadAnnouncements();
+              setAdminStatus(adminAnnStatus, "Updated.", "ok");
+            } catch (err) {
+              console.error(err);
+              setAdminStatus(adminAnnStatus, err.message || "Failed", "err");
+            }
+          });
+          const del = document.createElement("button");
+          del.type = "button";
+          del.className = "admin-btn danger";
+          del.textContent = "Delete";
+          del.addEventListener("click", async () => {
+            if (!confirm("Delete this announcement?")) return;
+            setAdminStatus(adminAnnStatus, "Deleting…", "");
+            try {
+              await deleteDoc(doc(db, "announcements", id));
+              await loadAnnouncements();
+              adminRenderAnnouncements();
+              setAdminStatus(adminAnnStatus, "Deleted.", "ok");
+            } catch (err) {
+              console.error(err);
+              setAdminStatus(adminAnnStatus, err.message || "Failed", "err");
+            }
+          });
+          orderRow.appendChild(document.createTextNode("Order "));
+          orderRow.appendChild(ord);
+          orderRow.appendChild(up);
+          orderRow.appendChild(del);
+          wrap.appendChild(ta);
+          wrap.appendChild(orderRow);
+          listEl.appendChild(wrap);
+        });
+      } catch (err) {
+        console.error(err);
+        listEl.innerHTML = "<p style='color:#f87171;font-size:0.8rem'>Could not load announcements.</p>";
+      }
+    }
+
+    document.getElementById("admin-refresh-ann")?.addEventListener("click", () => {
+      adminRenderAnnouncements();
+      setAdminStatus(adminAnnStatus, "Refreshed.", "ok");
+    });
+
+    document.getElementById("admin-add-ann")?.addEventListener("click", async () => {
+      const text = (document.getElementById("admin-new-ann-text")?.value || "").trim();
+      const order = Math.floor(Number(document.getElementById("admin-new-ann-order")?.value) || 0);
+      if (!text) {
+        setAdminStatus(adminAnnStatus, "Enter announcement text.", "err");
+        return;
+      }
+      setAdminStatus(adminAnnStatus, "Adding…", "");
+      try {
+        await addDoc(collection(db, "announcements"), { text, order });
+        document.getElementById("admin-new-ann-text").value = "";
+        await loadAnnouncements();
+        adminRenderAnnouncements();
+        setAdminStatus(adminAnnStatus, "Added.", "ok");
+      } catch (err) {
+        console.error(err);
+        setAdminStatus(adminAnnStatus, err.message || "Failed", "err");
+      }
+    });
+
+    document.getElementById("admin-apply-bank")?.addEventListener("click", () => {
+      const v = Math.min(BANK_MAX, Math.max(0, Math.floor(Number(document.getElementById("admin-session-bank")?.value) || 0)));
+      bankCoins = v;
+      updateBankUI();
+      setAdminStatus(adminSessionStatus, "Bank set to " + v + " (this tab only until Collect).", "ok");
+    });
+
+    document.getElementById("admin-reset-earn")?.addEventListener("click", () => {
+      resetEarnBar();
+      setAdminStatus(adminSessionStatus, "Earn timer reset.", "ok");
+    });
   </script>
 </body>
 </html>
